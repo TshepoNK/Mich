@@ -150,4 +150,4 @@ examples/
 
 ## License
 
-Internal — Mich Land Banking Group.
+
