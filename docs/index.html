@@ -118,8 +118,10 @@
     .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
     @media (max-width: 768px) {
       .grid-2, .grid-3 { grid-template-columns: 1fr; }
-      .section { padding: 64px 0; }
-      h1 { font-size: 38px; }
+      .section { padding: 56px 0; }
+      .section-sm { padding: 40px 0; }
+      h1 { font-size: 36px; }
+      h2 { font-size: 26px; }
     }
 
     /* ─── Navigation ─────────────────────────────────────────── */
@@ -162,27 +164,37 @@
     .btn-lg { font-size: 16px; padding: 14px 28px; border-radius: 10px; }
     @media (max-width: 640px) {
       .nav-links { display: none; }
+      .nav-inner { padding: 14px 16px; }
     }
 
     /* ─── Hero ───────────────────────────────────────────────── */
     .hero {
-      padding: 160px 0 96px; text-align: center; position: relative;
+      padding: 130px 0 72px; text-align: center; position: relative;
     }
     .hero-eyebrow { margin-bottom: 24px; }
     .hero h1 { margin-bottom: 24px; max-width: 900px; margin-left: auto; margin-right: auto; }
     .hero-sub {
-      font-size: clamp(16px, 2vw, 20px); color: var(--text-muted); max-width: 620px;
+      font-size: clamp(15px, 2vw, 20px); color: var(--text-muted); max-width: 620px;
       margin: 0 auto 40px; line-height: 1.7;
     }
     .hero-ctas { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 64px; }
+    @media (max-width: 480px) {
+      .hero { padding: 110px 0 56px; }
+      .hero-ctas .btn-lg { width: 100%; justify-content: center; }
+      .hero-ctas { flex-direction: column; }
+    }
     .hero-glow {
       position: absolute; top: 0; left: 50%; transform: translateX(-50%);
       width: 700px; height: 400px; pointer-events: none;
       background: radial-gradient(ellipse at 50% 0%, rgba(0,212,255,0.10) 0%, transparent 70%);
     }
     .hero-metrics {
-      display: flex; justify-content: center; gap: 48px; flex-wrap: wrap;
+      display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;
       padding-top: 48px; border-top: 1px solid var(--border);
+    }
+    @media (max-width: 480px) {
+      .hero-metrics { gap: 24px; }
+      .metric-value { font-size: 28px; }
     }
     .metric { text-align: center; }
     .metric-value { font-size: 36px; font-weight: 800; color: var(--text); letter-spacing: -0.03em; }
@@ -192,6 +204,9 @@
     .terminal {
       background: #0d1117; border: 1px solid var(--border); border-radius: var(--radius-lg);
       overflow: hidden; text-align: left; max-width: 640px; margin: 0 auto;
+    }
+    @media (max-width: 480px) {
+      .terminal-body { padding: 16px; font-size: 11.5px; }
     }
     .terminal-bar {
       display: flex; align-items: center; gap: 8px;
@@ -384,11 +399,21 @@
     .comp-table .check { color: var(--green); font-weight: 700; }
     .comp-table .cross { color: var(--red); }
     .comp-table .partial { color: var(--orange); }
+    @media (max-width: 640px) {
+      .comp-table th, .comp-table td { padding: 10px 12px; font-size: 11.5px; }
+      /* hide Cypress column on very small screens */
+      .comp-table th:last-child, .comp-table td:last-child { display: none; }
+    }
 
     /* ─── Install Section ────────────────────────────────────── */
     .install-box {
       background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-lg);
       overflow: hidden; max-width: 680px; margin: 0 auto;
+    }
+    @media (max-width: 480px) {
+      .install-step { padding: 18px 16px; }
+      .cmd-line { flex-wrap: wrap; gap: 8px; }
+      .cmd-text { font-size: 11.5px; word-break: break-all; }
     }
     .install-tab-bar {
       display: flex; background: var(--bg3); border-bottom: 1px solid var(--border);
@@ -426,13 +451,18 @@
     }
     .cta-section h2 { margin-bottom: 16px; }
     .cta-section p { font-size: 18px; color: var(--text-muted); margin-bottom: 40px; max-width: 520px; margin-left: auto; margin-right: auto; }
+    @media (max-width: 480px) {
+      .cta-section { padding: 64px 0; }
+      .cta-section p { font-size: 15px; }
+      .cta-section .btn-lg { width: 100%; justify-content: center; }
+    }
 
     /* ─── Footer ─────────────────────────────────────────────── */
     footer {
       border-top: 1px solid var(--border); padding: 40px 0;
     }
     .footer-inner {
-      display: flex; align-items: center; justify-content: space-between; flex-wrap: gap;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;
       gap: 16px;
     }
     .footer-logo { display: flex; align-items: center; gap: 8px; font-weight: 700; color: var(--text); font-size: 15px; }
@@ -442,6 +472,22 @@
     .footer-badge {
       font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 100px;
       background: rgba(74,222,128,0.1); color: var(--green); border: 1px solid rgba(74,222,128,0.2);
+    }
+    @media (max-width: 480px) {
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+      .footer-badge { display: none; }
+    }
+
+    /* ─── Two-col responsive ─────────────────────────────────── */
+    @media (max-width: 768px) {
+      .two-col-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+    }
+
+    /* ─── Agents mobile ──────────────────────────────────────── */
+    @media (max-width: 480px) {
+      .agent-card { min-width: 140px; padding: 16px; }
+      .agents-row { gap: 10px; }
+      .agent-orch, .agent-memory { padding: 20px 24px; }
     }
 
     /* ─── Scrollbar ──────────────────────────────────────────── */
@@ -608,7 +654,7 @@
     /* ─── Ticker ─────────────────────────────────────────── */
     .ticker-wrap {
       overflow:hidden; white-space:nowrap; border-top:1px solid var(--border);
-      border-bottom:1px solid var(--border); padding:12px 0; margin-top:48px; position:relative;
+      border-bottom:1px solid var(--border); padding:12px 0; margin-top:32px; position:relative;
     }
     .ticker-wrap::before, .ticker-wrap::after {
       content:''; position:absolute; top:0; bottom:0; width:100px; z-index:2; pointer-events:none;
@@ -837,9 +883,7 @@
   <!-- ─── Write Tests ─────────────────────────────────── -->
   <section class="section" id="authoring">
     <div class="container">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;">
-        <div>
-          <span class="label" style="display:inline-flex;margin-bottom:16px;">Test Authoring</span>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;" class="two-col-grid">
           <h2 style="margin-top:12px;margin-bottom:16px;">Two formats. Zero JavaScript.</h2>
           <p style="color:var(--text-muted);font-size:15px;line-height:1.7;margin-bottom:24px;">
             Write tests in YAML or Gherkin-style natural language. Both formats compile to the same goal spec — a structured intent description that the agent swarm executes.
@@ -954,9 +998,7 @@
   <!-- ─── Element Fingerprinting ─────────────────────── -->
   <section class="section">
     <div class="container">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;">
-        <div>
-          <span class="label label-purple" style="display:inline-flex;margin-bottom:16px;">Self-Healing</span>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;" class="two-col-grid">
           <h2 style="margin-top:12px;margin-bottom:16px;">Selectors become irrelevant</h2>
           <p style="color:var(--text-muted);font-size:15px;line-height:1.7;margin-bottom:16px;">
             Mich Orion stores a <strong style="color:var(--text);">multi-modal element fingerprint</strong> — not a CSS selector. Each interactive element is known by its aria role, visible text, screen region, and network trigger.
