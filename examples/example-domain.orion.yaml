@@ -1,0 +1,8 @@
+test: Visit example.com and follow the link
+url: https://example.com
+
+steps:
+  - "I should see Example Domain"
+  - "the heading should contain \"Example Domain\""
+  - "click the Learn more link"
+  - "url should contain iana.org"

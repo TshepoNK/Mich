@@ -1,0 +1,32 @@
+{
+  "name": "@mich/orion",
+  "version": "0.1.0",
+  "description": "Orion — goal-oriented agentic UI testing on Playwright",
+  "main": "dist/cli.js",
+  "bin": {
+    "orion": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "start": "node dist/cli.js",
+    "dev": "tsx src/cli.ts",
+    "test:example": "tsx src/cli.ts run examples/example-domain.orion.yaml",
+    "test:gherkin": "tsx src/cli.ts run examples/duck-search.orion.gherkin",
+    "postinstall": "echo Run: npx playwright install chromium"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.40.0",
+    "js-yaml": "^4.1.0",
+    "playwright": "^1.49.0"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.orion/
+*.log
+.env
+.env.*
+!.env.example
+.DS_Store
+*.tsbuildinfo

@@ -1,0 +1,7 @@
+Test: User can search on DuckDuckGo
+URL: https://duckduckgo.com
+
+When I type "carbon credits" into the search field
+And I press enter
+Then I should see results
+And url should contain duckduckgo.com

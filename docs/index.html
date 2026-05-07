@@ -1,0 +1,1693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mich Orion by TechElite — Autonomous UI Testing That Writes, Heals & Explains Itself</title>
+  <meta name="description" content="Mich Orion by TechElite turns your app's goals into living tests. No selectors. No JavaScript. Just describe what your app should do — agents handle the rest." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── Reset & Base ───────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:        #07090f;
+      --bg2:       #0d1117;
+      --bg3:       #111827;
+      --border:    rgba(255,255,255,0.08);
+      --cyan:      #00d4ff;
+      --cyan-dim:  rgba(0,212,255,0.12);
+      --orange:    #ff7c35;
+      --orange-dim: rgba(255,124,53,0.12);
+      --purple:    #a78bfa;
+      --green:     #4ade80;
+      --red:       #f87171;
+      --text:      #e2e8f0;
+      --text-muted:#94a3b8;
+      --text-dim:  #64748b;
+      --mono:      'JetBrains Mono', monospace;
+      --sans:      'Inter', sans-serif;
+      --radius:    12px;
+      --radius-lg: 20px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    a { color: var(--cyan); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    ::selection { background: rgba(0,212,255,0.25); }
+
+    /* ─── Star Background ────────────────────────────────────── */
+    .stars {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background: radial-gradient(ellipse at 50% 0%, rgba(0,212,255,0.04) 0%, transparent 60%),
+                  radial-gradient(ellipse at 80% 80%, rgba(167,139,250,0.04) 0%, transparent 50%);
+    }
+    .stars::before, .stars::after {
+      content: ''; position: absolute; inset: 0;
+      background-image:
+        radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 30% 60%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 50% 10%, rgba(255,255,255,0.7) 0%, transparent 100%),
+        radial-gradient(1px 1px at 70% 40%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 90% 75%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 15% 80%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 55% 50%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 80% 15%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 25% 35%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 65% 85%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 40% 70%, rgba(0,212,255,0.5) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 85% 30%, rgba(167,139,250,0.4) 0%, transparent 100%);
+    }
+    .stars::after {
+      background-image:
+        radial-gradient(1px 1px at 5% 50%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 45% 25%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 75% 65%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 20% 90%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 60% 5%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 35% 45%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 95% 55%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 12% 12%, rgba(255,124,53,0.35) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 88% 88%, rgba(0,212,255,0.4) 0%, transparent 100%);
+    }
+
+    /* ─── Layout Utils ───────────────────────────────────────── */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+    .section { padding: 96px 0; }
+    .section-sm { padding: 64px 0; }
+    .label {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--cyan); background: var(--cyan-dim); border: 1px solid rgba(0,212,255,0.25);
+      padding: 5px 12px; border-radius: 100px;
+    }
+    .label-orange { color: var(--orange); background: var(--orange-dim); border-color: rgba(255,124,53,0.25); }
+    .label-purple { color: var(--purple); background: rgba(167,139,250,0.1); border-color: rgba(167,139,250,0.25); }
+    h1, h2, h3, h4 { line-height: 1.15; font-weight: 700; letter-spacing: -0.02em; }
+    h1 { font-size: clamp(42px, 7vw, 80px); font-weight: 800; }
+    h2 { font-size: clamp(28px, 4vw, 48px); }
+    h3 { font-size: clamp(18px, 2vw, 24px); font-weight: 600; }
+    .text-gradient {
+      background: linear-gradient(135deg, var(--cyan) 0%, var(--purple) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .text-gradient-orange {
+      background: linear-gradient(135deg, var(--orange) 0%, #ffb347 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .card {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-lg);
+      padding: 32px;
+    }
+    .card-hover {
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .card-hover:hover {
+      border-color: rgba(0,212,255,0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0,212,255,0.08);
+    }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    @media (max-width: 768px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .section { padding: 64px 0; }
+      h1 { font-size: 38px; }
+    }
+
+    /* ─── Navigation ─────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      border-bottom: 1px solid transparent;
+      transition: background 0.3s, border-color 0.3s, backdrop-filter 0.3s;
+    }
+    nav.scrolled {
+      background: rgba(7,9,15,0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-color: var(--border);
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 24px; max-width: 1100px; margin: 0 auto;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: -0.02em;
+    }
+    .nav-logo svg { flex-shrink: 0; }
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .nav-links a { font-size: 14px; font-weight: 500; color: var(--text-muted); transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 14px; font-weight: 600; padding: 10px 20px; border-radius: 8px;
+      transition: all 0.2s; cursor: pointer; border: none;
+    }
+    .btn-primary {
+      background: var(--cyan); color: #07090f;
+    }
+    .btn-primary:hover { background: #22ddff; transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,212,255,0.35); text-decoration: none; }
+    .btn-ghost {
+      background: transparent; color: var(--text); border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); text-decoration: none; }
+    .btn-lg { font-size: 16px; padding: 14px 28px; border-radius: 10px; }
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+    }
+
+    /* ─── Hero ───────────────────────────────────────────────── */
+    .hero {
+      padding: 160px 0 96px; text-align: center; position: relative;
+    }
+    .hero-eyebrow { margin-bottom: 24px; }
+    .hero h1 { margin-bottom: 24px; max-width: 900px; margin-left: auto; margin-right: auto; }
+    .hero-sub {
+      font-size: clamp(16px, 2vw, 20px); color: var(--text-muted); max-width: 620px;
+      margin: 0 auto 40px; line-height: 1.7;
+    }
+    .hero-ctas { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 64px; }
+    .hero-glow {
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 700px; height: 400px; pointer-events: none;
+      background: radial-gradient(ellipse at 50% 0%, rgba(0,212,255,0.10) 0%, transparent 70%);
+    }
+    .hero-metrics {
+      display: flex; justify-content: center; gap: 48px; flex-wrap: wrap;
+      padding-top: 48px; border-top: 1px solid var(--border);
+    }
+    .metric { text-align: center; }
+    .metric-value { font-size: 36px; font-weight: 800; color: var(--text); letter-spacing: -0.03em; }
+    .metric-label { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
+    /* ─── Terminal / Code ────────────────────────────────────── */
+    .terminal {
+      background: #0d1117; border: 1px solid var(--border); border-radius: var(--radius-lg);
+      overflow: hidden; text-align: left; max-width: 640px; margin: 0 auto;
+    }
+    .terminal-bar {
+      display: flex; align-items: center; gap: 8px;
+      padding: 12px 16px; background: rgba(255,255,255,0.03); border-bottom: 1px solid var(--border);
+    }
+    .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .dot-red { background: #ff5f57; }
+    .dot-yellow { background: #ffbd2e; }
+    .dot-green { background: #28ca41; }
+    .terminal-title { font-size: 12px; color: var(--text-dim); margin-left: auto; font-family: var(--mono); }
+    .terminal-body { padding: 24px; font-family: var(--mono); font-size: 13px; line-height: 1.8; }
+    .t-key   { color: #a78bfa; }
+    .t-val   { color: #4ade80; }
+    .t-str   { color: #fbbf24; }
+    .t-cmd   { color: var(--cyan); }
+    .t-dim   { color: var(--text-dim); }
+    .t-step  { color: var(--text-muted); }
+    .t-pass  { color: var(--green); }
+    .t-fail  { color: var(--red); }
+    .t-warn  { color: var(--orange); }
+    .t-comment { color: #4b5563; }
+
+    /* Code Tabs */
+    .code-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); }
+    .code-tab {
+      padding: 10px 20px; font-size: 13px; font-weight: 500; font-family: var(--mono);
+      color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent;
+      margin-bottom: -1px; transition: all 0.2s; background: none; border-top: none; border-left: none; border-right: none;
+    }
+    .code-tab:hover { color: var(--text); }
+    .code-tab.active { color: var(--cyan); border-bottom-color: var(--cyan); }
+    .code-panel { display: none; }
+    .code-panel.active { display: block; }
+
+    /* ─── Problem Section ────────────────────────────────────── */
+    .problem-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 48px; }
+    @media (max-width: 640px) { .problem-grid { grid-template-columns: 1fr; } }
+    .pain-card {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 20px 24px; display: flex; gap: 16px; align-items: flex-start;
+    }
+    .pain-icon {
+      width: 36px; height: 36px; border-radius: 8px; background: rgba(248,113,113,0.1);
+      border: 1px solid rgba(248,113,113,0.2); display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-size: 16px;
+    }
+    .pain-card h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .pain-card p { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+
+    /* ─── How It Works ───────────────────────────────────────── */
+    .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 48px; position: relative; }
+    .steps-grid::before {
+      content: '';
+      position: absolute;
+      top: 32px;
+      left: calc(16.66% + 20px);
+      right: calc(16.66% + 20px);
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), var(--border), transparent);
+    }
+    @media (max-width: 768px) {
+      .steps-grid { grid-template-columns: 1fr; }
+      .steps-grid::before { display: none; }
+    }
+    .step { text-align: center; }
+    .step-num {
+      width: 64px; height: 64px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; font-weight: 800; margin: 0 auto 20px;
+      position: relative; z-index: 1;
+    }
+    .step-num-1 { background: var(--cyan-dim); border: 2px solid rgba(0,212,255,0.4); color: var(--cyan); }
+    .step-num-2 { background: rgba(167,139,250,0.1); border: 2px solid rgba(167,139,250,0.4); color: var(--purple); }
+    .step-num-3 { background: var(--orange-dim); border: 2px solid rgba(255,124,53,0.4); color: var(--orange); }
+    .step h3 { margin-bottom: 12px; font-size: 18px; }
+    .step p { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+
+    /* ─── Features ───────────────────────────────────────────── */
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 48px; }
+    @media (max-width: 900px) { .features-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px) { .features-grid { grid-template-columns: 1fr; } }
+    .feature-card {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-lg);
+      padding: 28px; transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .feature-card:hover {
+      border-color: rgba(0,212,255,0.25); transform: translateY(-2px);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+    }
+    .feature-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center; font-size: 22px;
+      margin-bottom: 16px;
+    }
+    .feature-card h3 { font-size: 16px; margin-bottom: 8px; }
+    .feature-card p { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+
+    /* ─── Code Compare ───────────────────────────────────────── */
+    .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 48px; }
+    @media (max-width: 768px) { .compare-grid { grid-template-columns: 1fr; } }
+    .compare-label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 8px 16px; border-radius: 6px 6px 0 0; font-family: var(--mono);
+    }
+    .compare-bad .compare-label { background: rgba(248,113,113,0.12); color: var(--red); border: 1px solid rgba(248,113,113,0.2); border-bottom: none; }
+    .compare-good .compare-label { background: rgba(74,222,128,0.1); color: var(--green); border: 1px solid rgba(74,222,128,0.2); border-bottom: none; }
+    .compare-code {
+      background: #0d1117; border-radius: 0 0 var(--radius) var(--radius);
+      padding: 20px; font-family: var(--mono); font-size: 12.5px; line-height: 1.8;
+    }
+    .compare-bad .compare-code { border: 1px solid rgba(248,113,113,0.2); }
+    .compare-good .compare-code { border: 1px solid rgba(74,222,128,0.2); }
+
+    /* ─── Failure Brief ──────────────────────────────────────── */
+    .brief-box {
+      background: #0d1117; border: 1px solid var(--border); border-radius: var(--radius-lg);
+      overflow: hidden; margin-top: 48px;
+    }
+    .brief-header {
+      background: rgba(248,113,113,0.06); border-bottom: 1px solid rgba(248,113,113,0.15);
+      padding: 16px 28px; display: flex; align-items: center; gap: 12px;
+    }
+    .brief-status { width: 10px; height: 10px; background: var(--red); border-radius: 50%; animation: pulse-red 2s infinite; }
+    @keyframes pulse-red { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    .brief-header-text { font-family: var(--mono); font-size: 14px; font-weight: 600; color: var(--red); }
+    .brief-header-sub { margin-left: auto; font-size: 12px; color: var(--text-dim); font-family: var(--mono); }
+    .brief-body { padding: 28px; font-family: var(--mono); font-size: 13px; line-height: 2; }
+    .brief-section { margin-bottom: 20px; }
+    .brief-section-title { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 6px; }
+    .brief-line { color: var(--text-muted); padding-left: 16px; }
+    .brief-highlight { color: var(--text); }
+    .brief-error { color: var(--red); }
+    .brief-success { color: var(--green); }
+    .brief-warn { color: var(--orange); }
+    .brief-cyan { color: var(--cyan); }
+    .brief-footer {
+      border-top: 1px solid var(--border); padding: 16px 28px;
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    }
+    .brief-badge {
+      font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 4px; font-family: var(--mono);
+    }
+    .badge-critical { background: rgba(248,113,113,0.15); color: var(--red); border: 1px solid rgba(248,113,113,0.3); }
+    .badge-app-bug { background: rgba(251,191,36,0.12); color: #fbbf24; border: 1px solid rgba(251,191,36,0.25); }
+    .badge-not-test { background: rgba(74,222,128,0.1); color: var(--green); border: 1px solid rgba(74,222,128,0.2); }
+
+    /* ─── Agents Section ─────────────────────────────────────── */
+    .agents-diagram {
+      display: flex; flex-direction: column; align-items: center; gap: 16px; margin-top: 48px;
+    }
+    .agent-orch {
+      background: linear-gradient(135deg, rgba(0,212,255,0.08), rgba(167,139,250,0.08));
+      border: 1px solid rgba(0,212,255,0.3); border-radius: var(--radius-lg);
+      padding: 24px 48px; text-align: center; width: 100%; max-width: 500px;
+    }
+    .agent-orch-title { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--cyan); margin-bottom: 4px; font-weight: 600; }
+    .agent-orch-name { font-size: 20px; font-weight: 700; }
+    .agent-orch-desc { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+    .agents-arrow { color: var(--text-dim); font-size: 22px; }
+    .agents-row { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; width: 100%; max-width: 800px; }
+    .agent-card {
+      flex: 1; min-width: 180px; max-width: 200px;
+      background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 20px; text-align: center;
+    }
+    .agent-card-icon { font-size: 28px; margin-bottom: 10px; }
+    .agent-card-name { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .agent-card-desc { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+    .agents-arrow-row { display: flex; gap: 16px; justify-content: center; width: 100%; max-width: 800px; }
+    .agents-arrow-row .agents-arrow { flex: 1; min-width: 180px; max-width: 200px; }
+    .agent-memory {
+      background: rgba(167,139,250,0.06); border: 1px solid rgba(167,139,250,0.25); border-radius: var(--radius);
+      padding: 20px 40px; text-align: center; max-width: 500px;
+    }
+    .agent-memory-title { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--purple); font-weight: 600; margin-bottom: 4px; }
+    .agent-memory-name { font-size: 18px; font-weight: 700; }
+    .agent-memory-desc { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+    /* ─── Comparison Table ───────────────────────────────────── */
+    .comp-table { width: 100%; border-collapse: collapse; margin-top: 48px; overflow: hidden; border-radius: var(--radius-lg); border: 1px solid var(--border); }
+    .comp-table th, .comp-table td { padding: 14px 20px; text-align: left; border-bottom: 1px solid var(--border); font-size: 13px; }
+    .comp-table th { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); background: var(--bg2); }
+    .comp-table tr:last-child td { border-bottom: none; }
+    .comp-table tr:nth-child(even) td { background: rgba(255,255,255,0.015); }
+    .comp-table tr:hover td { background: rgba(0,212,255,0.03); }
+    .comp-col-orion { color: var(--cyan); font-weight: 600; }
+    .comp-star { color: var(--cyan); }
+    .star-empty { color: var(--text-dim); }
+    th.col-orion { color: var(--cyan) !important; }
+    .comp-table .check { color: var(--green); font-weight: 700; }
+    .comp-table .cross { color: var(--red); }
+    .comp-table .partial { color: var(--orange); }
+
+    /* ─── Install Section ────────────────────────────────────── */
+    .install-box {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-lg);
+      overflow: hidden; max-width: 680px; margin: 0 auto;
+    }
+    .install-tab-bar {
+      display: flex; background: var(--bg3); border-bottom: 1px solid var(--border);
+    }
+    .install-tab {
+      padding: 12px 24px; font-size: 13px; font-weight: 500; font-family: var(--mono);
+      color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent;
+      margin-bottom: -1px; transition: all 0.2s; background: none; border-top: none; border-left: none; border-right: none;
+    }
+    .install-tab.active { color: var(--cyan); border-bottom-color: var(--cyan); }
+    .install-step { padding: 24px 28px; border-bottom: 1px solid var(--border); }
+    .install-step:last-child { border-bottom: none; }
+    .install-step-num {
+      font-size: 11px; font-weight: 700; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px;
+    }
+    .cmd-line {
+      display: flex; align-items: center; gap: 12px;
+      background: #0d1117; border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px;
+      font-family: var(--mono); font-size: 13px;
+    }
+    .cmd-prompt { color: var(--text-dim); user-select: none; }
+    .cmd-text { color: var(--cyan); flex: 1; }
+    .cmd-copy {
+      background: none; border: 1px solid var(--border); color: var(--text-muted);
+      font-size: 11px; padding: 4px 10px; border-radius: 4px; cursor: pointer;
+      font-family: var(--mono); transition: all 0.2s;
+    }
+    .cmd-copy:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
+    .install-comment { font-size: 12px; color: var(--text-muted); margin-top: 8px; }
+
+    /* ─── CTA Section ────────────────────────────────────────── */
+    .cta-section {
+      text-align: center; padding: 96px 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(0,212,255,0.06) 0%, transparent 65%);
+    }
+    .cta-section h2 { margin-bottom: 16px; }
+    .cta-section p { font-size: 18px; color: var(--text-muted); margin-bottom: 40px; max-width: 520px; margin-left: auto; margin-right: auto; }
+
+    /* ─── Footer ─────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border); padding: 40px 0;
+    }
+    .footer-inner {
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: gap;
+      gap: 16px;
+    }
+    .footer-logo { display: flex; align-items: center; gap: 8px; font-weight: 700; color: var(--text); font-size: 15px; }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { font-size: 13px; color: var(--text-muted); }
+    .footer-links a:hover { color: var(--text); text-decoration: none; }
+    .footer-badge {
+      font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 100px;
+      background: rgba(74,222,128,0.1); color: var(--green); border: 1px solid rgba(74,222,128,0.2);
+    }
+
+    /* ─── Scrollbar ──────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }
+
+    /* ─── Misc ───────────────────────────────────────────────── */
+    .divider { height: 1px; background: var(--border); margin: 0; }
+    .center { text-align: center; }
+    .mb-4 { margin-bottom: 16px; }
+    .mb-6 { margin-bottom: 24px; }
+    .mb-12 { margin-bottom: 48px; }
+    .mt-6 { margin-top: 24px; }
+    .mt-3 { margin-top: 12px; }
+
+    /* Fingerprint visualizer */
+    .fingerprint-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 24px;
+    }
+    .fp-item {
+      background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px;
+    }
+    .fp-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 4px; font-family: var(--mono); }
+    .fp-value { font-size: 13px; color: var(--text); font-family: var(--mono); }
+    .fp-bar-wrap { height: 4px; background: var(--bg); border-radius: 2px; margin-top: 6px; overflow: hidden; }
+    .fp-bar { height: 100%; border-radius: 2px; }
+    .bar-99 { width: 99%; background: var(--green); }
+    .bar-97 { width: 97%; background: var(--green); }
+    .bar-71 { width: 71%; background: #fbbf24; }
+    .bar-43 { width: 43%; background: var(--red); }
+
+    /* Memory badge */
+    .memory-card {
+      background: rgba(167,139,250,0.06); border: 1px solid rgba(167,139,250,0.2); border-radius: var(--radius);
+      padding: 16px 20px; font-family: var(--mono); font-size: 12px; margin-top: 16px;
+    }
+    .memory-run { display: flex; align-items: center; gap: 10px; padding: 4px 0; }
+    .memory-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .dot-pass { background: var(--green); }
+    .dot-fail { background: var(--red); }
+    .memory-text { color: var(--text-muted); }
+    .memory-notice {
+      margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(167,139,250,0.15);
+      color: var(--purple); font-size: 11px;
+    }
+
+    /* Healing scenario card */
+    .heal-steps { margin-top: 32px; display: flex; flex-direction: column; gap: 0; }
+    .heal-step {
+      display: flex; gap: 16px; align-items: flex-start; padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .heal-step:last-child { border-bottom: none; }
+    .heal-n {
+      width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 2px;
+    }
+    .heal-n-fail { background: rgba(248,113,113,0.12); color: var(--red); border: 1px solid rgba(248,113,113,0.25); }
+    .heal-n-ok   { background: rgba(74,222,128,0.1); color: var(--green); border: 1px solid rgba(74,222,128,0.25); }
+    .heal-n-info { background: var(--cyan-dim); color: var(--cyan); border: 1px solid rgba(0,212,255,0.25); }
+    .heal-step-body h4 { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+    .heal-step-body p { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+    /* ─── Keyframes ──────────────────────────────────────── */
+    @keyframes fadeInUp   { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeInDown { from { opacity:0; transform:translateY(-16px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes float      { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-14px); } }
+    @keyframes float2     { 0%,100% { transform:translateY(0) translateX(0); } 33% { transform:translateY(-10px) translateX(8px); } 66% { transform:translateY(6px) translateX(-5px); } }
+    @keyframes shimmer    { 0% { background-position:-200% center; } 100% { background-position:200% center; } }
+    @keyframes pulse-ring { 0%,100% { box-shadow:0 0 0 0 rgba(0,212,255,0.2); } 50% { box-shadow:0 0 0 8px rgba(0,212,255,0); } }
+    @keyframes blink      { 0%,100%{opacity:1} 50%{opacity:0} }
+    @keyframes scan-line  { 0% { top:-2px; } 100% { top:100%; } }
+    @keyframes ticker-scroll { from { transform:translateX(0); } to { transform:translateX(-50%); } }
+    @keyframes spin-slow  { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+    @keyframes glow-border { 0%,100%{border-color:rgba(0,212,255,0.3)} 50%{border-color:rgba(167,139,250,0.5)} }
+
+    /* ─── Canvas ─────────────────────────────────────────── */
+    #constellation { position:fixed; inset:0; z-index:0; pointer-events:none; }
+
+    /* ─── Floating Orbs ──────────────────────────────────── */
+    .orb { position:fixed; border-radius:50%; pointer-events:none; z-index:0; filter:blur(90px); }
+    .orb-1 { width:700px; height:700px; top:-180px; left:-120px; background:radial-gradient(circle, rgba(0,212,255,0.18) 0%, transparent 70%); animation:float 20s ease-in-out infinite; }
+    .orb-2 { width:600px; height:600px; top:35%; right:-180px; background:radial-gradient(circle, rgba(167,139,250,0.16) 0%, transparent 70%); animation:float2 25s ease-in-out infinite; }
+    .orb-3 { width:450px; height:450px; bottom:5%; left:5%; background:radial-gradient(circle, rgba(255,124,53,0.10) 0%, transparent 70%); animation:float 30s ease-in-out infinite reverse; }
+
+    /* ─── Hero Entrance ──────────────────────────────────── */
+    .hero-eyebrow  { animation:fadeInDown 0.7s ease both; }
+    .hero h1       { animation:fadeInUp 0.75s 0.15s ease both; }
+    .hero-sub      { animation:fadeInUp 0.75s 0.30s ease both; }
+    .hero-ctas     { animation:fadeInUp 0.75s 0.45s ease both; }
+    .hero .terminal{ animation:fadeInUp 0.85s 0.55s ease both; }
+    .hero-metrics  { animation:fadeInUp 0.75s 0.65s ease both; }
+
+    /* ─── Animated gradient text ─────────────────────────── */
+    .text-gradient-animate {
+      background:linear-gradient(135deg, var(--cyan) 0%, var(--purple) 40%, var(--cyan) 80%, var(--purple) 100%);
+      background-size:200% auto;
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+      animation:shimmer 5s linear infinite;
+    }
+
+    /* ─── Button shimmer sweep ───────────────────────────── */
+    .btn-primary { position:relative; overflow:hidden; }
+    .btn-primary::after {
+      content:''; position:absolute; inset:0;
+      background:linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.22) 50%, transparent 70%);
+      transform:translateX(-100%); transition:transform 0.55s ease;
+    }
+    .btn-primary:hover::after { transform:translateX(120%); }
+
+    /* ─── Nav logo hover ─────────────────────────────────── */
+    .nav-logo svg { transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+    .nav-logo:hover svg { transform:rotate(45deg) scale(1.12); }
+
+    /* ─── Feature card spotlight ─────────────────────────── */
+    .feature-card { position:relative; overflow:hidden; }
+    .feature-card::before {
+      content:''; position:absolute; inset:0; opacity:0; transition:opacity 0.3s;
+      background:radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(0,212,255,0.09) 0%, transparent 60%);
+      pointer-events:none;
+    }
+    .feature-card:hover::before { opacity:1; }
+
+    /* ─── Step pulse ─────────────────────────────────────── */
+    .step-num   { animation:pulse-ring 3.0s ease-in-out infinite; }
+    .step-num-2 { animation-delay:1s; }
+    .step-num-3 { animation-delay:2s; }
+
+    /* ─── Agent cards ────────────────────────────────────── */
+    .agent-card { transition:transform 0.3s ease, border-color 0.3s, box-shadow 0.3s; }
+    .agent-card:hover { transform:translateY(-5px); border-color:rgba(0,212,255,0.35); box-shadow:0 16px 48px rgba(0,212,255,0.1); }
+    .agent-card-icon { display:inline-block; animation:float 4s ease-in-out infinite; }
+    .agent-card:nth-child(2) .agent-card-icon { animation-delay:-1.4s; }
+    .agent-card:nth-child(3) .agent-card-icon { animation-delay:-2.8s; }
+
+    /* ─── Orchestrator glow ──────────────────────────────── */
+    .agent-orch { animation:glow-border 4s ease-in-out infinite; }
+
+    /* ─── Brief scan line ────────────────────────────────── */
+    .brief-box { position:relative; overflow:hidden; }
+    .brief-box::after {
+      content:''; position:absolute; left:0; right:0; height:2px;
+      background:linear-gradient(90deg, transparent, rgba(248,113,113,0.5), transparent);
+      animation:scan-line 5s linear infinite; pointer-events:none; z-index:3;
+    }
+
+    /* ─── Cursor blink ───────────────────────────────────── */
+    .t-cursor { display:inline-block; width:7px; height:13px; background:var(--cyan); vertical-align:middle; animation:blink 1s step-end infinite; margin-left:2px; border-radius:1px; }
+
+    /* ─── Pain card hover ────────────────────────────────── */
+    .pain-card { transition:border-color 0.25s, transform 0.25s, box-shadow 0.25s; }
+    .pain-card:hover { border-color:rgba(248,113,113,0.3); transform:translateY(-2px); box-shadow:0 8px 28px rgba(0,0,0,0.35); }
+
+    /* ─── Divider animated ───────────────────────────────── */
+    .divider { height:1px; background:linear-gradient(90deg, transparent 0%, var(--border) 20%, rgba(0,212,255,0.18) 50%, var(--border) 80%, transparent 100%); }
+
+    /* ─── Metric hover ───────────────────────────────────── */
+    .metric { cursor:default; }
+    .metric-value { transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1); }
+    .metric:hover .metric-value { transform:scale(1.08); }
+
+    /* ─── Ticker ─────────────────────────────────────────── */
+    .ticker-wrap {
+      overflow:hidden; white-space:nowrap; border-top:1px solid var(--border);
+      border-bottom:1px solid var(--border); padding:12px 0; margin-top:48px; position:relative;
+    }
+    .ticker-wrap::before, .ticker-wrap::after {
+      content:''; position:absolute; top:0; bottom:0; width:100px; z-index:2; pointer-events:none;
+    }
+    .ticker-wrap::before { left:0;  background:linear-gradient(90deg, var(--bg), transparent); }
+    .ticker-wrap::after  { right:0; background:linear-gradient(-90deg, var(--bg), transparent); }
+    .ticker { display:inline-flex; gap:40px; animation:ticker-scroll 28s linear infinite; }
+    .ticker-item {
+      display:inline-flex; align-items:center; gap:8px;
+      font-size:11px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-dim);
+    }
+    .ticker-dot { width:4px; height:4px; border-radius:50%; background:var(--cyan); flex-shrink:0; }
+  </style>
+</head>
+<body>
+  <canvas id="constellation"></canvas>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <!-- ─── Navigation ─────────────────────────────────── -->
+  <nav id="nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo" style="text-decoration:none;">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="14" cy="14" r="13" stroke="rgba(0,212,255,0.4)" stroke-width="1.5"/>
+          <circle cx="14" cy="6"  r="2.5" fill="#00d4ff"/>
+          <circle cx="22" cy="10" r="2"   fill="rgba(0,212,255,0.6)"/>
+          <circle cx="22" cy="18" r="2"   fill="rgba(0,212,255,0.6)"/>
+          <circle cx="14" cy="22" r="2.5" fill="rgba(167,139,250,0.8)"/>
+          <circle cx="6"  cy="18" r="2"   fill="rgba(0,212,255,0.6)"/>
+          <circle cx="6"  cy="10" r="2"   fill="rgba(0,212,255,0.6)"/>
+          <line x1="14" y1="6"  x2="22" y2="10" stroke="rgba(0,212,255,0.25)" stroke-width="1"/>
+          <line x1="22" y1="10" x2="22" y2="18" stroke="rgba(0,212,255,0.25)" stroke-width="1"/>
+          <line x1="22" y1="18" x2="14" y2="22" stroke="rgba(0,212,255,0.25)" stroke-width="1"/>
+          <line x1="14" y1="22" x2="6"  y2="18" stroke="rgba(0,212,255,0.25)" stroke-width="1"/>
+          <line x1="6"  y1="18" x2="6"  y2="10" stroke="rgba(0,212,255,0.25)" stroke-width="1"/>
+          <line x1="6"  y1="10" x2="14" y2="6"  stroke="rgba(0,212,255,0.25)" stroke-width="1"/>
+          <circle cx="14" cy="14" r="2" fill="rgba(0,212,255,0.3)"/>
+        </svg>
+        Mich Orion <span style="font-size:11px;font-weight:500;color:var(--text-dim);margin-left:4px;">by TechElite</span>
+      </a>
+      <div class="nav-links">
+        <a href="#how-it-works">How it works</a>
+        <a href="#features">Features</a>
+        <a href="#comparison">Compare</a>
+        <a href="#install">Install</a>
+        <a href="https://github.com" style="color:var(--text-muted);">GitHub</a>
+      </div>
+      <a href="#install" class="btn btn-primary" style="font-size:13px;padding:8px 18px;">Get Started</a>
+    </div>
+  </nav>
+
+  <!-- ─── Hero ───────────────────────────────────────── -->
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="container">
+      <div class="hero-eyebrow">
+        <span class="label">v0.1 — Walking Skeleton</span>
+      </div>
+      <h1>
+        Tests that write,<br/>
+        heal, and <span class="text-gradient-animate">explain themselves</span>
+      </h1>
+      <p class="hero-sub">
+        Mich Orion is a goal-oriented agentic UI testing platform. You describe what your app
+        should do in plain language — a swarm of AI agents verifies it, adapts as the app evolves,
+        and explains failures like an incident report, not a stack trace.
+      </p>
+      <div class="hero-ctas">
+        <a href="#install" class="btn btn-primary btn-lg">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm-.75 4.75a.75.75 0 0 1 1.5 0v3l1.72 1.72a.75.75 0 1 1-1.06 1.06l-2-2A.75.75 0 0 1 7.25 9V5.75z"/></svg>
+          Get started free
+        </a>
+        <a href="#how-it-works" class="btn btn-ghost btn-lg">See how it works</a>
+      </div>
+
+      <!-- Live terminal demo -->
+      <div class="terminal" style="max-width:660px;">
+        <div class="terminal-bar">
+          <span class="dot dot-red"></span>
+          <span class="dot dot-yellow"></span>
+          <span class="dot dot-green"></span>
+          <span class="terminal-title">duck-search.orion.gherkin</span>
+        </div>
+        <div class="terminal-body" id="terminal-body" style="min-height:295px;"><span class="t-cursor"></span></div>
+      </div>
+
+      <div class="ticker-wrap">
+        <div class="ticker">
+          <span class="ticker-item"><span class="ticker-dot"></span>Self-healing tests</span>
+          <span class="ticker-item"><span class="ticker-dot"></span>Zero JavaScript required</span>
+          <span class="ticker-item"><span class="ticker-dot"></span>AI-powered failure briefs</span>
+          <span class="ticker-item"><span class="ticker-dot"></span>Network-aware assertions</span>
+          <span class="ticker-item"><span class="ticker-dot"></span>File-backed memory</span>
+          <span class="ticker-item"><span class="ticker-dot"></span>Multi-strategy resolution</span>
+          <span class="ticker-item"><span class="ticker-dot"></span>Flakiness detection</span>
+          <span class="ticker-item"><span class="ticker-dot"></span>YAML &amp; Gherkin formats</span>
+          <span class="ticker-item"><span class="ticker-dot"></span>Self-healing tests</span>
+          <span class="ticker-item"><span class="ticker-dot"></span>Zero JavaScript required</span>
+          <span class="ticker-item"><span class="ticker-dot"></span>AI-powered failure briefs</span>
+          <span class="ticker-item"><span class="ticker-dot"></span>Network-aware assertions</span>
+          <span class="ticker-item"><span class="ticker-dot"></span>File-backed memory</span>
+          <span class="ticker-item"><span class="ticker-dot"></span>Multi-strategy resolution</span>
+          <span class="ticker-item"><span class="ticker-dot"></span>Flakiness detection</span>
+          <span class="ticker-item"><span class="ticker-dot"></span>YAML &amp; Gherkin formats</span>
+        </div>
+      </div>
+
+      <div class="hero-metrics" style="margin-top:48px;">
+        <div class="metric">
+          <div class="metric-value text-gradient" data-target="6" data-display="6">6</div>
+          <div class="metric-label">Element resolution strategies</div>
+        </div>
+        <div class="metric">
+          <div class="metric-value text-gradient" data-target="0" data-display="0">0</div>
+          <div class="metric-label">Lines of JavaScript to write</div>
+        </div>
+        <div class="metric">
+          <div class="metric-value text-gradient" data-target="4" data-display="4">4</div>
+          <div class="metric-label">Specialized AI agents</div>
+        </div>
+        <div class="metric">
+          <div class="metric-value text-gradient-orange">&lt;15 min</div>
+          <div class="metric-label">First test passing, from zero</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ─── The Problem ────────────────────────────────── -->
+  <section class="section" id="problem">
+    <div class="container">
+      <div class="center mb-6">
+        <span class="label label-orange" style="margin-bottom:16px;display:inline-flex;">The Problem</span>
+        <h2 style="margin-top:12px;">UI testing is expensive,<br/>brittle, and exclusive</h2>
+        <p style="color:var(--text-muted);max-width:560px;margin:16px auto 0;font-size:16px;line-height:1.7;">
+          QA teams face the same fundamental problems regardless of which tools they reach for.
+        </p>
+      </div>
+
+      <div class="problem-grid">
+        <div class="pain-card">
+          <div class="pain-icon">💔</div>
+          <div>
+            <h4>Selector Brittleness</h4>
+            <p>A single design sprint can invalidate hundreds of test files. SDETs spend days in "selector archaeology" after every UI refactor.</p>
+          </div>
+        </div>
+        <div class="pain-card">
+          <div class="pain-icon">🚧</div>
+          <div>
+            <h4>High Floor for Non-Coders</h4>
+            <p>Manual QA testers with years of domain knowledge are excluded because they can't write TypeScript async/await. The tools fail their most valuable users.</p>
+          </div>
+        </div>
+        <div class="pain-card">
+          <div class="pain-icon">⏱️</div>
+          <div>
+            <h4>Authoring Is Expensive</h4>
+            <p>An experienced engineer spends 2–4 hours writing a single reliable checkout test. Recorders generate code that breaks in 6 months.</p>
+          </div>
+        </div>
+        <div class="pain-card">
+          <div class="pain-icon">🎲</div>
+          <div>
+            <h4>Flakiness Has No System-Level Fix</h4>
+            <p><code>retry()</code> and <code>waitFor()</code> are band-aids. Teams disable flaky tests rather than fix them, creating a false safety net.</p>
+          </div>
+        </div>
+        <div class="pain-card">
+          <div class="pain-icon">🔧</div>
+          <div>
+            <h4>Maintenance Grows With Velocity</h4>
+            <p>At scale, test maintenance consumes 30–50% of automation time. The faster the team ships, the more tests break. There is no structural answer.</p>
+          </div>
+        </div>
+        <div class="pain-card">
+          <div class="pain-icon">🤷</div>
+          <div>
+            <h4>No Business Intent</h4>
+            <p>Playwright knows nothing about what a test <em>means</em>. A payment failure and a CSS class change look identical — both produce a red test and a stack trace.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ─── How It Works ───────────────────────────────── -->
+  <section class="section" id="how-it-works">
+    <div class="container">
+      <div class="center mb-6">
+        <span class="label" style="margin-bottom:16px;display:inline-flex;">How it works</span>
+        <h2 style="margin-top:12px;">Describe goals. Agents do the rest.</h2>
+        <p style="color:var(--text-muted);max-width:520px;margin:16px auto 0;font-size:16px;line-height:1.7;">
+          Mich Orion decouples the <em>intent</em> of a test from the <em>implementation</em>. The goal is permanent. The execution strategy adapts.
+        </p>
+      </div>
+
+      <div class="steps-grid">
+        <div class="step">
+          <div class="step-num step-num-1">1</div>
+          <h3>Write a goal</h3>
+          <p>Use plain English, YAML, or Gherkin. Describe what the user should be able to do — not which elements to click. No code required.</p>
+        </div>
+        <div class="step">
+          <div class="step-num step-num-2">2</div>
+          <h3>Agents execute it</h3>
+          <p>Four specialized agents — Orchestrator, Flow, Observe, and Memory — collaborate to navigate, assert, monitor network traffic, and learn from every run.</p>
+        </div>
+        <div class="step">
+          <div class="step-num step-num-3">3</div>
+          <h3>Get a Failure Brief</h3>
+          <p>When something breaks, you get an incident-style report: what failed, why it's an app bug (not a test issue), and which PR likely caused it.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ─── Write Tests ─────────────────────────────────── -->
+  <section class="section" id="authoring">
+    <div class="container">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;">
+        <div>
+          <span class="label" style="display:inline-flex;margin-bottom:16px;">Test Authoring</span>
+          <h2 style="margin-top:12px;margin-bottom:16px;">Two formats. Zero JavaScript.</h2>
+          <p style="color:var(--text-muted);font-size:15px;line-height:1.7;margin-bottom:24px;">
+            Write tests in YAML or Gherkin-style natural language. Both formats compile to the same goal spec — a structured intent description that the agent swarm executes.
+          </p>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;">
+            <li style="display:flex;gap:10px;align-items:flex-start;font-size:14px;">
+              <span style="color:var(--green);font-weight:700;flex-shrink:0;">✓</span>
+              <span style="color:var(--text-muted);">Navigate, click, type, submit, assert visible, assert URL — all in plain language</span>
+            </li>
+            <li style="display:flex;gap:10px;align-items:flex-start;font-size:14px;">
+              <span style="color:var(--green);font-weight:700;flex-shrink:0;">✓</span>
+              <span style="color:var(--text-muted);">Every successful run fingerprints element strategies to <code style="font-size:12px;color:var(--cyan);">.orion/memory/</code></span>
+            </li>
+            <li style="display:flex;gap:10px;align-items:flex-start;font-size:14px;">
+              <span style="color:var(--green);font-weight:700;flex-shrink:0;">✓</span>
+              <span style="color:var(--text-muted);">Tests are version-controllable, human-reviewable, and framework-agnostic</span>
+            </li>
+            <li style="display:flex;gap:10px;align-items:flex-start;font-size:14px;">
+              <span style="color:var(--green);font-weight:700;flex-shrink:0;">✓</span>
+              <span style="color:var(--text-muted);">Raw Playwright escape hatch available for power users who need it</span>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <div class="terminal" style="max-width:100%;">
+            <div class="terminal-bar">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <div style="margin-left:8px;display:flex;gap:0;">
+                <button class="code-tab active" onclick="switchTab(event,'yaml')" style="font-size:12px;padding:4px 12px;">YAML</button>
+                <button class="code-tab" onclick="switchTab(event,'gherkin')" style="font-size:12px;padding:4px 12px;">Gherkin</button>
+              </div>
+            </div>
+            <div class="terminal-body" id="panel-yaml">
+<span class="t-key">test:</span> <span class="t-val">User can reset their password</span>
+<span class="t-key">url:</span>  <span class="t-str">https://your-app.com/login</span>
+<br/>
+<span class="t-key">steps:</span>
+  <span class="t-dim">-</span> <span class="t-str">"click the Forgot password link"</span>
+  <span class="t-dim">-</span> <span class="t-str">"type \"test@example.com\" into the email field"</span>
+  <span class="t-dim">-</span> <span class="t-str">"submit the form"</span>
+  <span class="t-dim">-</span> <span class="t-str">"I should see a confirmation message"</span>
+  <span class="t-dim">-</span> <span class="t-str">"url should contain reset-sent"</span>
+            </div>
+            <div class="terminal-body" id="panel-gherkin" style="display:none;">
+<span class="t-key">Test:</span> <span class="t-val">User can reset their password</span>
+<span class="t-key">URL:</span>  <span class="t-str">https://your-app.com/login</span>
+<br/>
+<span class="t-step">Given</span> I am on the login page
+<span class="t-step">When</span>  I click <span class="t-str">"Forgot password"</span>
+<span class="t-step">And</span>   I enter my email <span class="t-str">"test@example.com"</span>
+<span class="t-step">And</span>   I submit the form
+<span class="t-step">Then</span>  I should see a confirmation message
+<span class="t-step">And</span>   url should contain <span class="t-str">reset-sent</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ─── Features ───────────────────────────────────── -->
+  <section class="section" id="features">
+    <div class="container">
+      <div class="center mb-6">
+        <span class="label" style="margin-bottom:16px;display:inline-flex;">Features</span>
+        <h2 style="margin-top:12px;">Built for resilience, not just automation</h2>
+        <p style="color:var(--text-muted);max-width:540px;margin:16px auto 0;font-size:16px;line-height:1.7;">
+          Every capability was designed around a real failure mode in traditional test frameworks.
+        </p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon" style="background:var(--cyan-dim);border:1px solid rgba(0,212,255,0.2);">🧠</div>
+          <h3>Multi-Strategy Resolution</h3>
+          <p>Elements are found via aria-label → role+name → label-for → placeholder → visible-text → DOM hint. The fragile CSS selector is always the last resort, never the first.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.2);">💾</div>
+          <h3>File-Backed Memory</h3>
+          <p>Every successful resolution is fingerprinted to <code style="font-size:11px;color:var(--cyan);">.orion/memory/&lt;test&gt;.json</code>. Future runs use the strategies that already worked, eliminating cold-start fragility.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.2);">📡</div>
+          <h3>Network Observation</h3>
+          <p>XHR and fetch traffic is recorded alongside every step. Assertions can target network outcomes — "POST /api/orders returned 201" — eliminating race-condition flakiness structurally.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.2);">🩺</div>
+          <h3>Failure Brief</h3>
+          <p>Incidents are reported like a post-mortem: what failed, why it's an app bug vs test drift, which JS error fired, and which recent PR is the likely culprit. No stack traces.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.2);">🔮</div>
+          <h3>Flakiness Detection</h3>
+          <p>After enough runs, recurring failure signatures are automatically flagged as patterns — not isolated failures. The system learns that step 3 flakes at 2:30 PM UTC in CI and tells you why.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background:rgba(255,124,53,0.08);border:1px solid rgba(255,124,53,0.2);">⚡</div>
+          <h3>LLM-Powered Briefs</h3>
+          <p>With an Anthropic API key, failure briefs are written by Claude Sonnet 4.6 with prompt caching. Without a key, you still get a fully structured deterministic brief.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ─── Element Fingerprinting ─────────────────────── -->
+  <section class="section">
+    <div class="container">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;">
+        <div>
+          <span class="label label-purple" style="display:inline-flex;margin-bottom:16px;">Self-Healing</span>
+          <h2 style="margin-top:12px;margin-bottom:16px;">Selectors become irrelevant</h2>
+          <p style="color:var(--text-muted);font-size:15px;line-height:1.7;margin-bottom:16px;">
+            Mich Orion stores a <strong style="color:var(--text);">multi-modal element fingerprint</strong> — not a CSS selector. Each interactive element is known by its aria role, visible text, screen region, and network trigger.
+          </p>
+          <p style="color:var(--text-muted);font-size:15px;line-height:1.7;margin-bottom:24px;">
+            Strategies are ranked by a confidence score. When the developer renames a component, the agent tries the next strategy, succeeds, updates its strategy map, and the test stays green. CI never sees red.
+          </p>
+
+          <div class="heal-steps">
+            <div class="heal-step">
+              <div class="heal-n heal-n-fail">1</div>
+              <div class="heal-step-body">
+                <h4 style="color:var(--red);">Primary strategy fails</h4>
+                <p>CSS selector <code style="font-size:11px;color:var(--text-dim);">.checkout-btn</code> not found — developer refactored the component.</p>
+              </div>
+            </div>
+            <div class="heal-step">
+              <div class="heal-n heal-n-info">2</div>
+              <div class="heal-step-body">
+                <h4 style="color:var(--cyan);">Agent escalates to text strategy</h4>
+                <p>Locates button with visible text "Complete Purchase" in the expected screen region. Confidence: 0.97.</p>
+              </div>
+            </div>
+            <div class="heal-step">
+              <div class="heal-n heal-n-ok">3</div>
+              <div class="heal-step-body">
+                <h4 style="color:var(--green);">Test passes. CI stays green.</h4>
+                <p>Memory Agent logs the stale selector, promotes text strategy. A low-priority notice is queued for the team.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="card" style="background:var(--bg2);">
+            <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-dim);margin-bottom:16px;font-family:var(--mono);">Element Fingerprint — checkout-submit</div>
+            <div class="fingerprint-grid">
+              <div class="fp-item">
+                <div class="fp-label">aria_label</div>
+                <div class="fp-value">"Complete purchase"</div>
+                <div class="fp-bar-wrap"><div class="fp-bar bar-99"></div></div>
+                <div style="font-size:10px;color:var(--green);margin-top:3px;font-family:var(--mono);">confidence 0.99</div>
+              </div>
+              <div class="fp-item">
+                <div class="fp-label">visible_text</div>
+                <div class="fp-value">"Complete Purchase"</div>
+                <div class="fp-bar-wrap"><div class="fp-bar bar-97"></div></div>
+                <div style="font-size:10px;color:var(--green);margin-top:3px;font-family:var(--mono);">confidence 0.97</div>
+              </div>
+              <div class="fp-item">
+                <div class="fp-label">screen_region</div>
+                <div class="fp-value">"bottom-right-form"</div>
+                <div class="fp-bar-wrap"><div class="fp-bar bar-71"></div></div>
+                <div style="font-size:10px;color:#fbbf24;margin-top:3px;font-family:var(--mono);">confidence 0.71</div>
+              </div>
+              <div class="fp-item">
+                <div class="fp-label">dom_path_hint</div>
+                <div class="fp-value">form &gt; .actions &gt; button</div>
+                <div class="fp-bar-wrap"><div class="fp-bar bar-43"></div></div>
+                <div style="font-size:10px;color:var(--red);margin-top:3px;font-family:var(--mono);">confidence 0.43 — last resort</div>
+              </div>
+            </div>
+            <div style="margin-top:16px;padding:12px 14px;background:var(--bg3);border-radius:8px;font-size:12px;color:var(--text-muted);font-family:var(--mono);border:1px solid var(--border);">
+              <span style="color:var(--purple);">network_trigger:</span> <span style="color:var(--cyan);">POST /api/orders</span><br/>
+              <span style="color:var(--purple);">role:</span> <span style="color:var(--text);">button</span>
+            </div>
+          </div>
+
+          <div class="memory-card">
+            <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--purple);margin-bottom:10px;">Run History — checkout flow</div>
+            <div class="memory-run"><div class="memory-dot dot-pass"></div><span class="memory-text">Run #47 — passed — aria_label strategy — 0.99</span></div>
+            <div class="memory-run"><div class="memory-dot dot-fail"></div><span class="memory-text">Run #48 — healed — text strategy used — 0.97</span></div>
+            <div class="memory-run"><div class="memory-dot dot-pass"></div><span class="memory-text">Run #49 — passed — text strategy — 0.97</span></div>
+            <div class="memory-notice">⚠ aria_label strategy deprecated — selector update recommended</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ─── Failure Brief ──────────────────────────────── -->
+  <section class="section" id="failure-brief">
+    <div class="container">
+      <div class="center mb-6">
+        <span class="label label-orange" style="margin-bottom:16px;display:inline-flex;">Failure Brief</span>
+        <h2 style="margin-top:12px;">Incident reports, not stack traces</h2>
+        <p style="color:var(--text-muted);max-width:540px;margin:16px auto 0;font-size:16px;line-height:1.7;">
+          When a test fails, Mich Orion doesn't show a wall of JavaScript. It writes a structured report that tells you <em>what broke, why it's a real bug, and who likely caused it</em>.
+        </p>
+      </div>
+
+      <div class="brief-box">
+        <div class="brief-header">
+          <div class="brief-status"></div>
+          <div class="brief-header-text">FAILURE BRIEF — User Checkout Flow</div>
+          <div class="brief-header-sub">Step 4/7 · 2026-05-07 14:32 UTC</div>
+        </div>
+        <div class="brief-body">
+          <div class="brief-section">
+            <div class="brief-section-title">What Failed</div>
+            <div class="brief-line brief-highlight">Step 4 of 7: "Order confirmation message should appear"</div>
+          </div>
+          <div class="brief-section">
+            <div class="brief-section-title">What Happened</div>
+            <div class="brief-line">The checkout form was submitted successfully.</div>
+            <div class="brief-line brief-success">→  POST /api/orders returned 201 OK — order was created in the backend.</div>
+            <div class="brief-line brief-error">→  Confirmation message never appeared on screen.</div>
+            <div class="brief-line brief-error">→  JS error 240ms after submission:</div>
+            <div class="brief-line brief-error" style="padding-left:32px;">"TypeError: Cannot read properties of undefined (reading 'orderId')"</div>
+            <div class="brief-line brief-warn" style="padding-left:32px;">in checkout-confirmation.component.js:84</div>
+          </div>
+          <div class="brief-section">
+            <div class="brief-section-title">Why This Is Likely a Bug — Not a Test Issue</div>
+            <div class="brief-line">The API returned a valid order object. The UI code failed to read it.</div>
+            <div class="brief-line">This pattern is consistent with a <span class="brief-highlight">frontend regression</span>, not a test configuration error.</div>
+          </div>
+          <div class="brief-section">
+            <div class="brief-section-title">Suggested Next Step</div>
+            <div class="brief-line brief-cyan">→  Review recent changes to checkout-confirmation.component.js</div>
+            <div class="brief-line brief-warn">   Last modified: 2 hours ago by @dev.sarah (PR #847)</div>
+          </div>
+          <div class="brief-section" style="margin-bottom:0;">
+            <div class="brief-section-title">Similar Past Failures</div>
+            <div class="brief-line">This exact error pattern occurred on 2025-11-14 — resolved in PR #712.</div>
+          </div>
+        </div>
+        <div class="brief-footer">
+          <span class="brief-badge badge-critical">CRITICAL</span>
+          <span class="brief-badge badge-app-bug">App Bug</span>
+          <span class="brief-badge badge-not-test">Not a test issue</span>
+          <span style="margin-left:auto;font-size:12px;color:var(--text-dim);font-family:var(--mono);">Generated by Claude Sonnet 4.6 · prompt cache hit</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ─── Agent Architecture ─────────────────────────── -->
+  <section class="section" id="architecture">
+    <div class="container">
+      <div class="center mb-6">
+        <span class="label label-purple" style="margin-bottom:16px;display:inline-flex;">Architecture</span>
+        <h2 style="margin-top:12px;">Four agents. One goal.</h2>
+        <p style="color:var(--text-muted);max-width:520px;margin:16px auto 0;font-size:16px;line-height:1.7;">
+          Mich Orion's multi-agent architecture separates concerns that traditional tools conflate: navigation, assertion, observation, and learning.
+        </p>
+      </div>
+
+      <div class="agents-diagram">
+        <div class="agent-orch">
+          <div class="agent-orch-title">Tier 1</div>
+          <div class="agent-orch-name">Orchestrator Agent</div>
+          <div class="agent-orch-desc">Receives test goal + app context → produces execution plan, agent assignments, and priority order</div>
+        </div>
+        <div class="agents-arrow">↓</div>
+        <div class="agents-row">
+          <div class="agent-card">
+            <div class="agent-card-icon">🧭</div>
+            <div class="agent-card-name">Flow Agent</div>
+            <div class="agent-card-desc">Navigates the UI to reach the goal — resolves elements, performs actions, handles retries</div>
+          </div>
+          <div class="agent-card">
+            <div class="agent-card-icon">✅</div>
+            <div class="agent-card-name">Assert Agent</div>
+            <div class="agent-card-desc">Verifies outcomes against intent — distinguishes cosmetic changes from functional regressions</div>
+          </div>
+          <div class="agent-card">
+            <div class="agent-card-icon">📡</div>
+            <div class="agent-card-name">Observe Agent</div>
+            <div class="agent-card-desc">Monitors XHR/fetch traffic, console errors, and performance during every action</div>
+          </div>
+        </div>
+        <div class="agents-arrow">↓</div>
+        <div class="agent-memory">
+          <div class="agent-memory-title">Persistent Layer</div>
+          <div class="agent-memory-name">Memory Agent</div>
+          <div class="agent-memory-desc">Stores learned strategies, failure patterns, and timing heuristics — gets smarter with every run</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ─── Playwright Comparison ──────────────────────── -->
+  <section class="section" id="comparison">
+    <div class="container">
+      <div class="center mb-6">
+        <span class="label" style="margin-bottom:16px;display:inline-flex;">Comparison</span>
+        <h2 style="margin-top:12px;">How Mich Orion stacks up</h2>
+        <p style="color:var(--text-muted);max-width:520px;margin:16px auto 0;font-size:16px;line-height:1.7;">
+          Mich Orion is built <em>on top of</em> Playwright — not against it. Playwright handles browser primitives. Mich Orion handles everything above the <code style="font-size:13px;color:var(--cyan);">Page</code> object.
+        </p>
+      </div>
+
+      <div style="overflow-x:auto;">
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th>Capability</th>
+              <th class="col-orion">Mich Orion</th>
+              <th>Playwright</th>
+              <th>Cypress</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Test authoring (non-coder)</strong></td>
+              <td class="comp-col-orion">Natural language, YAML</td>
+              <td class="cross">TypeScript required</td>
+              <td class="partial">JavaScript required</td>
+            </tr>
+            <tr>
+              <td><strong>Time to first passing test</strong></td>
+              <td class="comp-col-orion">&lt; 15 minutes</td>
+              <td class="partial">3–5 days</td>
+              <td class="partial">2–4 days</td>
+            </tr>
+            <tr>
+              <td><strong>Selector maintenance</strong></td>
+              <td class="comp-col-orion check">Near-zero — adaptive fingerprints</td>
+              <td class="cross">High — manual, per change</td>
+              <td class="cross">High — manual, per change</td>
+            </tr>
+            <tr>
+              <td><strong>Flakiness handling</strong></td>
+              <td class="comp-col-orion check">Structural — network-aware, memory-guided</td>
+              <td class="partial">Tactical — retry, waitFor</td>
+              <td class="partial">Tactical — cy.wait, retry</td>
+            </tr>
+            <tr>
+              <td><strong>Failure explanation</strong></td>
+              <td class="comp-col-orion check">Business-level brief with root cause</td>
+              <td class="cross">Stack trace + trace file</td>
+              <td class="partial">Command log + screenshots</td>
+            </tr>
+            <tr>
+              <td><strong>Self-healing</strong></td>
+              <td class="comp-col-orion check">Autonomous, tiered confidence</td>
+              <td class="cross">None built-in</td>
+              <td class="cross">None built-in</td>
+            </tr>
+            <tr>
+              <td><strong>Business intent understanding</strong></td>
+              <td class="comp-col-orion check">Yes — goal-oriented execution</td>
+              <td class="cross">No — code only</td>
+              <td class="cross">No — code only</td>
+            </tr>
+            <tr>
+              <td><strong>AI capabilities</strong></td>
+              <td class="comp-col-orion check">Native — agent-driven execution</td>
+              <td class="partial">Third-party plugins only</td>
+              <td class="partial">Third-party plugins only</td>
+            </tr>
+            <tr>
+              <td><strong>500-test suite maintenance cost</strong></td>
+              <td class="comp-col-orion check">~20% of SDET time</td>
+              <td class="cross">40–50% of SDET time</td>
+              <td class="cross">35–45% of SDET time</td>
+            </tr>
+            <tr>
+              <td><strong>Playwright substrate</strong></td>
+              <td class="comp-col-orion check">Yes — built on top of it</td>
+              <td class="check">Native</td>
+              <td class="cross">No</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:24px;padding:16px 20px;background:var(--cyan-dim);border:1px solid rgba(0,212,255,0.2);border-radius:var(--radius);font-size:13px;color:var(--text-muted);display:flex;gap:10px;align-items:flex-start;">
+        <span style="color:var(--cyan);flex-shrink:0;">ℹ</span>
+        <span>Mich Orion uses Playwright as its browser execution substrate. Any step can include a raw Playwright script block — power users aren't locked out. New users never need it.</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ─── Code Comparison ────────────────────────────── -->
+  <section class="section">
+    <div class="container">
+      <div class="center mb-6">
+        <span class="label label-orange" style="margin-bottom:16px;display:inline-flex;">Before &amp; After</span>
+        <h2 style="margin-top:12px;">The same test. Ten times less.</h2>
+      </div>
+
+      <div class="compare-grid">
+        <div class="compare-bad">
+          <div class="compare-label">Before — Playwright (TypeScript)</div>
+          <div class="compare-code">
+<span class="t-comment">// 17 lines of brittle, selector-dependent code</span><br/>
+<span class="t-key">test</span>(<span class="t-str">'user can reset password'</span>, <span class="t-step">async</span> ({ page }) => {<br/>
+&nbsp;&nbsp;<span class="t-step">await</span> page.<span class="t-cmd">goto</span>(<span class="t-str">'/login'</span>);<br/>
+&nbsp;&nbsp;<span class="t-step">await</span> page.<span class="t-cmd">waitForLoadState</span>(<span class="t-str">'networkidle'</span>);<br/>
+&nbsp;&nbsp;<span class="t-step">await</span> page<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;.<span class="t-cmd">locator</span>(<span class="t-str">'[data-testid="forgot-link"]'</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;.<span class="t-cmd">click</span>();<br/>
+&nbsp;&nbsp;<span class="t-step">await</span> page.<span class="t-cmd">waitForURL</span>(<span class="t-str">'**/forgot-password'</span>);<br/>
+&nbsp;&nbsp;<span class="t-step">await</span> page<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;.<span class="t-cmd">locator</span>(<span class="t-str">'#email-input'</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;.<span class="t-cmd">fill</span>(<span class="t-str">'test@example.com'</span>);<br/>
+&nbsp;&nbsp;<span class="t-step">await</span> page<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;.<span class="t-cmd">locator</span>(<span class="t-str">'[type="submit"]'</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;.<span class="t-cmd">click</span>();<br/>
+&nbsp;&nbsp;<span class="t-step">await</span> expect(page<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;.<span class="t-cmd">locator</span>(<span class="t-str">'.success-message'</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;.<span class="t-cmd">toBeVisible</span>({ timeout: 5000 });<br/>
+});
+          </div>
+        </div>
+        <div class="compare-good">
+          <div class="compare-label">After — Mich Orion (YAML)</div>
+          <div class="compare-code">
+<span class="t-comment"># 7 lines. No selectors. Self-healing.</span><br/>
+<br/>
+<span class="t-key">test:</span> <span class="t-val">User can reset their password</span><br/>
+<span class="t-key">url:</span>  <span class="t-str">https://your-app.com/login</span><br/>
+<br/>
+<span class="t-key">steps:</span><br/>
+&nbsp;&nbsp;<span class="t-dim">-</span> <span class="t-str">"click the Forgot password link"</span><br/>
+&nbsp;&nbsp;<span class="t-dim">-</span> <span class="t-str">"type \"test@example.com\" into email"</span><br/>
+&nbsp;&nbsp;<span class="t-dim">-</span> <span class="t-str">"submit the form"</span><br/>
+&nbsp;&nbsp;<span class="t-dim">-</span> <span class="t-str">"I should see a confirmation message"</span><br/>
+&nbsp;&nbsp;<span class="t-dim">-</span> <span class="t-str">"url should contain reset-sent"</span><br/>
+<br/>
+<span class="t-pass">✓</span> <span class="t-dim">Works after a UI refactor. Automatically.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ─── Install ─────────────────────────────────────── -->
+  <section class="section" id="install">
+    <div class="container">
+      <div class="center mb-6">
+        <span class="label" style="margin-bottom:16px;display:inline-flex;">Get Started</span>
+        <h2 style="margin-top:12px;">Up and running in 3 steps</h2>
+        <p style="color:var(--text-muted);max-width:480px;margin:16px auto 0;font-size:16px;line-height:1.7;">
+          No account required. No cloud signup. Runs entirely on your machine with Chromium.
+        </p>
+      </div>
+
+      <div class="install-box">
+        <div class="install-tab-bar">
+          <button class="install-tab active" onclick="switchInstallTab(event,'npm')">npm</button>
+          <button class="install-tab" onclick="switchInstallTab(event,'pnpm')">pnpm</button>
+          <button class="install-tab" onclick="switchInstallTab(event,'yarn')">yarn</button>
+        </div>
+
+        <div id="itab-npm">
+          <div class="install-step">
+            <div class="install-step-num">Step 1 — Install</div>
+            <div class="cmd-line">
+              <span class="cmd-prompt">$</span>
+              <span class="cmd-text" id="cmd1-npm">npm install @mich/orion</span>
+              <button class="cmd-copy" onclick="copyCmd('cmd1-npm')">copy</button>
+            </div>
+          </div>
+          <div class="install-step">
+            <div class="install-step-num">Step 2 — Install Chromium</div>
+            <div class="cmd-line">
+              <span class="cmd-prompt">$</span>
+              <span class="cmd-text" id="cmd2-npm">npx playwright install chromium</span>
+              <button class="cmd-copy" onclick="copyCmd('cmd2-npm')">copy</button>
+            </div>
+          </div>
+          <div class="install-step">
+            <div class="install-step-num">Step 3 — Run an example</div>
+            <div class="cmd-line">
+              <span class="cmd-prompt">$</span>
+              <span class="cmd-text" id="cmd3-npm">npx orion run examples/example-domain.orion.yaml</span>
+              <button class="cmd-copy" onclick="copyCmd('cmd3-npm')">copy</button>
+            </div>
+            <div class="install-comment">Add <code style="font-size:11px;color:var(--cyan);">--headed</code> to watch the browser. Set <code style="font-size:11px;color:var(--cyan);">ANTHROPIC_API_KEY</code> for LLM-powered failure briefs.</div>
+          </div>
+        </div>
+
+        <div id="itab-pnpm" style="display:none;">
+          <div class="install-step">
+            <div class="install-step-num">Step 1 — Install</div>
+            <div class="cmd-line">
+              <span class="cmd-prompt">$</span>
+              <span class="cmd-text" id="cmd1-pnpm">pnpm add @mich/orion</span>
+              <button class="cmd-copy" onclick="copyCmd('cmd1-pnpm')">copy</button>
+            </div>
+          </div>
+          <div class="install-step">
+            <div class="install-step-num">Step 2 — Install Chromium</div>
+            <div class="cmd-line">
+              <span class="cmd-prompt">$</span>
+              <span class="cmd-text" id="cmd2-pnpm">pnpm exec playwright install chromium</span>
+              <button class="cmd-copy" onclick="copyCmd('cmd2-pnpm')">copy</button>
+            </div>
+          </div>
+          <div class="install-step">
+            <div class="install-step-num">Step 3 — Run an example</div>
+            <div class="cmd-line">
+              <span class="cmd-prompt">$</span>
+              <span class="cmd-text" id="cmd3-pnpm">pnpm exec orion run examples/example-domain.orion.yaml</span>
+              <button class="cmd-copy" onclick="copyCmd('cmd3-pnpm')">copy</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="itab-yarn" style="display:none;">
+          <div class="install-step">
+            <div class="install-step-num">Step 1 — Install</div>
+            <div class="cmd-line">
+              <span class="cmd-prompt">$</span>
+              <span class="cmd-text" id="cmd1-yarn">yarn add @mich/orion</span>
+              <button class="cmd-copy" onclick="copyCmd('cmd1-yarn')">copy</button>
+            </div>
+          </div>
+          <div class="install-step">
+            <div class="install-step-num">Step 2 — Install Chromium</div>
+            <div class="cmd-line">
+              <span class="cmd-prompt">$</span>
+              <span class="cmd-text" id="cmd2-yarn">yarn playwright install chromium</span>
+              <button class="cmd-copy" onclick="copyCmd('cmd2-yarn')">copy</button>
+            </div>
+          </div>
+          <div class="install-step">
+            <div class="install-step-num">Step 3 — Run an example</div>
+            <div class="cmd-line">
+              <span class="cmd-prompt">$</span>
+              <span class="cmd-text" id="cmd3-yarn">yarn orion run examples/example-domain.orion.yaml</span>
+              <button class="cmd-copy" onclick="copyCmd('cmd3-yarn')">copy</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Optional LLM -->
+      <div style="max-width:680px;margin:16px auto 0;padding:16px 20px;background:rgba(167,139,250,0.06);border:1px solid rgba(167,139,250,0.2);border-radius:var(--radius);font-size:13px;color:var(--text-muted);display:flex;gap:10px;align-items:flex-start;">
+        <span style="color:var(--purple);flex-shrink:0;">✦</span>
+        <span>
+          <strong style="color:var(--text);">Optional — LLM failure briefs.</strong>
+          Set <code style="font-size:11px;color:var(--cyan);">ANTHROPIC_API_KEY=sk-ant-...</code> before running.
+          Without it, you still get structured deterministic failure briefs — just not AI-authored.
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ─── Supported Step Phrasings ──────────────────── -->
+  <section class="section-sm">
+    <div class="container">
+      <div class="center" style="margin-bottom:32px;">
+        <h3>Supported step phrasings</h3>
+        <p style="color:var(--text-muted);margin-top:8px;font-size:14px;">Mich Orion's goal parser recognises these natural language patterns.</p>
+      </div>
+      <div style="overflow-x:auto;max-width:800px;margin:0 auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:13px;">
+          <thead>
+            <tr style="border-bottom:1px solid var(--border);">
+              <th style="text-align:left;padding:10px 16px;color:var(--text-dim);font-size:11px;text-transform:uppercase;letter-spacing:0.08em;">You write</th>
+              <th style="text-align:left;padding:10px 16px;color:var(--text-dim);font-size:11px;text-transform:uppercase;letter-spacing:0.08em;">Mich Orion interprets as</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:10px 16px;font-family:var(--mono);color:var(--cyan);">navigate to https://...</td>
+              <td style="padding:10px 16px;color:var(--text-muted);">navigate</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);background:rgba(255,255,255,0.01);">
+              <td style="padding:10px 16px;font-family:var(--mono);color:var(--cyan);">click the X button &nbsp;/&nbsp; click X</td>
+              <td style="padding:10px 16px;color:var(--text-muted);">click</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:10px 16px;font-family:var(--mono);color:var(--cyan);">type "VALUE" into the X field</td>
+              <td style="padding:10px 16px;color:var(--text-muted);">type</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);background:rgba(255,255,255,0.01);">
+              <td style="padding:10px 16px;font-family:var(--mono);color:var(--cyan);">submit the form &nbsp;/&nbsp; press enter</td>
+              <td style="padding:10px 16px;color:var(--text-muted);">submit</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:10px 16px;font-family:var(--mono);color:var(--cyan);">I should see X &nbsp;/&nbsp; X is visible</td>
+              <td style="padding:10px 16px;color:var(--text-muted);">assert_visible</td>
+            </tr>
+            <tr>
+              <td style="padding:10px 16px;font-family:var(--mono);color:var(--cyan);">url should contain Y</td>
+              <td style="padding:10px 16px;color:var(--text-muted);">assert_url</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ─── CTA ─────────────────────────────────────────── -->
+  <section class="cta-section">
+    <div class="container">
+      <h2>Ready to stop maintaining selectors?</h2>
+      <p>Write your first test in under 15 minutes — no code, no account, no config files.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <a href="#install" class="btn btn-primary btn-lg">Install Mich Orion</a>
+        <a href="https://github.com" class="btn btn-ghost btn-lg">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/></svg>
+          View on GitHub
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Footer ─────────────────────────────────────── -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-logo">
+          <svg width="20" height="20" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="14" cy="14" r="13" stroke="rgba(0,212,255,0.4)" stroke-width="1.5"/>
+            <circle cx="14" cy="6"  r="2.5" fill="#00d4ff"/>
+            <circle cx="22" cy="10" r="2"   fill="rgba(0,212,255,0.6)"/>
+            <circle cx="22" cy="18" r="2"   fill="rgba(0,212,255,0.6)"/>
+            <circle cx="14" cy="22" r="2.5" fill="rgba(167,139,250,0.8)"/>
+            <circle cx="6"  cy="18" r="2"   fill="rgba(0,212,255,0.6)"/>
+            <circle cx="6"  cy="10" r="2"   fill="rgba(0,212,255,0.6)"/>
+            <line x1="14" y1="6"  x2="22" y2="10" stroke="rgba(0,212,255,0.25)" stroke-width="1"/>
+            <line x1="22" y1="10" x2="22" y2="18" stroke="rgba(0,212,255,0.25)" stroke-width="1"/>
+            <line x1="22" y1="18" x2="14" y2="22" stroke="rgba(0,212,255,0.25)" stroke-width="1"/>
+            <line x1="14" y1="22" x2="6"  y2="18" stroke="rgba(0,212,255,0.25)" stroke-width="1"/>
+            <line x1="6"  y1="18" x2="6"  y2="10" stroke="rgba(0,212,255,0.25)" stroke-width="1"/>
+            <line x1="6"  y1="10" x2="14" y2="6"  stroke="rgba(0,212,255,0.25)" stroke-width="1"/>
+          </svg>
+          <div>
+            <div style="font-size:15px;font-weight:700;">Mich Orion</div>
+            <div style="font-size:11px;color:var(--text-dim);font-weight:400;margin-top:1px;">by TechElite</div>
+          </div>
+        </div>
+        <div class="footer-links">
+          <a href="#how-it-works">Docs</a>
+          <a href="https://github.com">GitHub</a>
+          <a href="ORION.md">Vision</a>
+        </div>
+        <span class="footer-badge">v0.1 — Walking Skeleton</span>
+      </div>
+      <div style="margin-top:24px;font-size:12px;color:var(--text-dim);">
+        © 2026 TechElite. Built on Playwright. Powered by Claude Sonnet 4.6. Requires Node.js ≥ 20.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ─── Nav scroll ───────────────────────────────────────
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 20);
+    }, { passive: true });
+
+    // ─── Canvas constellation ─────────────────────────────
+    (function () {
+      const canvas = document.getElementById('constellation');
+      const ctx = canvas.getContext('2d');
+      let W, H;
+      function resize() {
+        W = canvas.width  = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+      }
+      resize();
+      window.addEventListener('resize', resize, { passive: true });
+
+      const COUNT = Math.min(70, Math.floor((window.innerWidth * window.innerHeight) / 16000));
+      const pts = Array.from({ length: COUNT }, () => ({
+        x: Math.random() * W, y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.22, vy: (Math.random() - 0.5) * 0.22,
+        r: Math.random() * 1.4 + 0.4, a: Math.random() * 0.55 + 0.15
+      }));
+
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+        for (let i = 0; i < pts.length; i++) {
+          const p = pts[i];
+          p.x += p.vx; p.y += p.vy;
+          if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+          if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255,255,255,${p.a})`;
+          ctx.fill();
+          for (let j = i + 1; j < pts.length; j++) {
+            const q = pts[j];
+            const dx = p.x - q.x, dy = p.y - q.y, d = Math.sqrt(dx * dx + dy * dy);
+            if (d < 150) {
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y); ctx.lineTo(q.x, q.y);
+              ctx.strokeStyle = `rgba(0,212,255,${(1 - d / 150) * 0.1})`;
+              ctx.lineWidth = 0.6;
+              ctx.stroke();
+            }
+          }
+        }
+        requestAnimationFrame(draw);
+      }
+      draw();
+    })();
+
+    // ─── Tab switchers ────────────────────────────────────
+    function switchTab(e, tab) {
+      document.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+      e.target.classList.add('active');
+      document.getElementById('panel-yaml').style.display    = tab === 'yaml'    ? 'block' : 'none';
+      document.getElementById('panel-gherkin').style.display = tab === 'gherkin' ? 'block' : 'none';
+    }
+    function switchInstallTab(e, tab) {
+      document.querySelectorAll('.install-tab').forEach(t => t.classList.remove('active'));
+      e.target.classList.add('active');
+      ['npm', 'pnpm', 'yarn'].forEach(t => {
+        document.getElementById('itab-' + t).style.display = t === tab ? 'block' : 'none';
+      });
+    }
+
+    // ─── Copy command ─────────────────────────────────────
+    function copyCmd(id) {
+      const text = document.getElementById(id).textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.querySelector(`[onclick="copyCmd('${id}')"]`);
+        if (btn) {
+          btn.textContent = 'copied!';
+          btn.style.color = 'var(--green)';
+          btn.style.borderColor = 'rgba(74,222,128,0.3)';
+          setTimeout(() => { btn.textContent = 'copy'; btn.style.color = ''; btn.style.borderColor = ''; }, 1500);
+        }
+      });
+    }
+
+    // ─── Terminal typewriter ──────────────────────────────
+    (function () {
+      const body = document.getElementById('terminal-body');
+      if (!body) return;
+      const lines = [
+        { html: '<span class="t-comment"># Your entire test. No JavaScript. No selectors.</span>' },
+        { blank: true },
+        { html: '<span class="t-key">Test:</span> <span class="t-val">User can search on DuckDuckGo</span>' },
+        { html: '<span class="t-key">URL:</span>  <span class="t-str">https://duckduckgo.com</span>' },
+        { blank: true },
+        { html: '<span class="t-step">When</span> I type <span class="t-str">&quot;carbon credits&quot;</span> into the search field' },
+        { html: '<span class="t-step">And</span>  I press enter' },
+        { html: '<span class="t-step">Then</span> I should see results' },
+        { html: '<span class="t-step">And</span>  url should contain <span class="t-str">duckduckgo.com</span>' },
+        { blank: true },
+        { html: '<span class="t-dim">─────────────────────────────────────────────</span>' },
+        { html: '<span class="t-cmd">$ npx orion run duck-search.orion.gherkin</span>', pause: 600 },
+        { blank: true },
+        { html: '<span class="t-pass">✓</span> <span class="t-step">type &quot;carbon credits&quot; into the search field</span>  <span class="t-dim">412ms</span>', pause: 430 },
+        { html: '<span class="t-pass">✓</span> <span class="t-step">press enter</span>                                   <span class="t-dim">180ms</span>', pause: 200 },
+        { html: '<span class="t-pass">✓</span> <span class="t-step">I should see results</span>                          <span class="t-dim">290ms</span>', pause: 300 },
+        { html: '<span class="t-pass">✓</span> <span class="t-step">url should contain duckduckgo.com</span>             <span class="t-dim">12ms</span>',  pause: 30  },
+        { blank: true },
+        { html: '<span class="t-pass">PASSED</span> <span class="t-dim">&mdash; 4 steps &middot; 894ms &middot; memory updated</span>' },
+      ];
+      let idx = 0;
+      function next() {
+        if (idx >= lines.length) return;
+        const line = lines[idx++];
+        const cursor = body.querySelector('.t-cursor');
+        const el = document.createElement('span');
+        el.innerHTML = (line.blank ? '' : line.html) + '<br/>';
+        body.insertBefore(el, cursor);
+        setTimeout(next, line.pause || (line.blank ? 60 : 95));
+      }
+      setTimeout(next, 900);
+    })();
+
+    // ─── Animated metric counters ─────────────────────────
+    function animateCounter(el) {
+      const target = parseFloat(el.dataset.target);
+      if (isNaN(target)) return;
+      const dur = 1600, start = performance.now();
+      (function tick(now) {
+        const p = Math.min((now - start) / dur, 1);
+        const ease = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(target * ease);
+        if (p < 1) requestAnimationFrame(tick);
+        else el.textContent = el.dataset.display || Math.round(target);
+      })(start);
+    }
+
+    // ─── Fingerprint bar entrance ─────────────────────────
+    const fpGrid = document.querySelector('.fingerprint-grid');
+    if (fpGrid) {
+      const bars = fpGrid.querySelectorAll('.fp-bar');
+      const targets = ['99%','97%','71%','43%'];
+      bars.forEach(b => { b.style.width = '0'; b.style.transition = 'width 1.2s cubic-bezier(0.4,0,0.2,1)'; });
+      new IntersectionObserver(([e]) => {
+        if (!e.isIntersecting) return;
+        bars.forEach((b, i) => setTimeout(() => { b.style.width = targets[i]; }, i * 160));
+      }, { threshold: 0.5 }).observe(fpGrid);
+    }
+
+    // ─── Scroll reveal with stagger ───────────────────────
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        if (el.dataset.target) animateCounter(el);
+        el.style.opacity = '1';
+        el.style.transform = 'translateY(0) scale(1)';
+        revealObs.unobserve(el);
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+
+    document.querySelectorAll('.feature-card, .pain-card, .step, .agent-card, .metric').forEach((el, i) => {
+      const parent = el.parentElement;
+      const siblings = Array.from(parent.children);
+      const delay = siblings.indexOf(el) * 85;
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(22px) scale(0.97)';
+      el.style.transition = `opacity 0.55s ${delay}ms ease, transform 0.55s ${delay}ms ease`;
+      revealObs.observe(el);
+    });
+
+    // ─── Feature card spotlight glow ──────────────────────
+    document.querySelectorAll('.feature-card').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const r = card.getBoundingClientRect();
+        card.style.setProperty('--mx', ((e.clientX - r.left) / r.width  * 100).toFixed(1) + '%');
+        card.style.setProperty('--my', ((e.clientY - r.top)  / r.height * 100).toFixed(1) + '%');
+      });
+    });
+  </script>
+</body>
+</html>
