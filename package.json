@@ -1,7 +1,7 @@
 {
-  "name": "@mich/orion",
+  "name": "@oriontest/orion",
   "version": "0.1.0",
-  "description": "Orion — goal-oriented agentic UI testing on Playwright",
+  "description": "Orion — goal-oriented agentic UI testing. Describe what your app should do. Orion tests it, heals it, and explains failures.",
   "main": "dist/cli.js",
   "bin": {
     "orion": "dist/cli.js"
@@ -28,5 +28,31 @@
   },
   "engines": {
     "node": ">=20"
-  }
+  },
+  "keywords": [
+    "testing",
+    "playwright",
+    "ai-testing",
+    "e2e",
+    "autonomous",
+    "self-healing",
+    "ui-testing",
+    "agentic",
+    "no-code-testing",
+    "gherkin"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TshepoNK/Mich.git"
+  },
+  "homepage": "https://github.com/TshepoNK/Mich#readme",
+  "bugs": {
+    "url": "https://github.com/TshepoNK/Mich/issues"
+  },
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ]
 }

@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mich Orion by TechElite — Autonomous UI Testing That Writes, Heals & Explains Itself</title>
-  <meta name="description" content="Mich Orion by TechElite turns your app's goals into living tests. No selectors. No JavaScript. Just describe what your app should do — agents handle the rest." />
+  <title>Orion — The AI Agent That Tests Like a Senior QA + BA</title>
+  <meta name="description" content="Orion is an autonomous AI testing agent. Give it a scenario in plain English. It builds the tests, runs them, heals when the UI changes, and reports like a senior QA engineer and business analyst." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -267,10 +267,8 @@
       height: 1px;
       background: linear-gradient(90deg, transparent, var(--border), var(--border), transparent);
     }
-    @media (max-width: 768px) {
-      .steps-grid { grid-template-columns: 1fr; }
-      .steps-grid::before { display: none; }
-    }
+    @media (max-width: 900px) { .steps-grid { grid-template-columns: repeat(2, 1fr) !important; } }
+    @media (max-width: 560px) { .steps-grid { grid-template-columns: 1fr !important; } }
     .step { text-align: center; }
     .step-num {
       width: 64px; height: 64px; border-radius: 50%;
@@ -695,12 +693,12 @@
           <line x1="6"  y1="10" x2="14" y2="6"  stroke="rgba(0,212,255,0.25)" stroke-width="1"/>
           <circle cx="14" cy="14" r="2" fill="rgba(0,212,255,0.3)"/>
         </svg>
-        Mich Orion <span style="font-size:11px;font-weight:500;color:var(--text-dim);margin-left:4px;">by TechElite</span>
+        Orion
       </a>
       <div class="nav-links">
         <a href="#how-it-works">How it works</a>
-        <a href="#features">Features</a>
-        <a href="#comparison">Compare</a>
+        <a href="#agent-modes">Agent Modes</a>
+        <a href="#failure-brief">Reports</a>
         <a href="#install">Install</a>
         <a href="https://github.com/TshepoNK/Mich" style="color:var(--text-muted);">GitHub</a>
       </div>
@@ -713,23 +711,24 @@
     <div class="hero-glow"></div>
     <div class="container">
       <div class="hero-eyebrow">
-        <span class="label">v0.1 — Walking Skeleton</span>
+        <span class="label">Open Source · v0.1</span>
       </div>
       <h1>
-        Tests that write,<br/>
-        heal, and <span class="text-gradient-animate">explain themselves</span>
+        The AI agent that<br/>
+        <span class="text-gradient-animate">tests your app for you.</span>
       </h1>
       <p class="hero-sub">
-        Mich Orion is a goal-oriented agentic UI testing platform. You describe what your app
-        should do in plain language — a swarm of AI agents verifies it, adapts as the app evolves,
-        and explains failures like an incident report, not a stack trace.
+        No test scripts. No selectors. No QA backlog.<br/>
+        Brief Orion on a scenario in plain English — it builds the tests,
+        runs them, heals when the UI changes, and reports back
+        like a senior QA engineer and business analyst in one.
       </p>
       <div class="hero-ctas">
         <a href="#install" class="btn btn-primary btn-lg">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm-.75 4.75a.75.75 0 0 1 1.5 0v3l1.72 1.72a.75.75 0 1 1-1.06 1.06l-2-2A.75.75 0 0 1 7.25 9V5.75z"/></svg>
-          Get started free
+          Deploy your AI tester
         </a>
-        <a href="#how-it-works" class="btn btn-ghost btn-lg">See how it works</a>
+        <a href="#how-it-works" class="btn btn-ghost btn-lg">See it in action</a>
       </div>
 
       <!-- Live terminal demo -->
@@ -745,41 +744,41 @@
 
       <div class="ticker-wrap">
         <div class="ticker">
-          <span class="ticker-item"><span class="ticker-dot"></span>Self-healing tests</span>
-          <span class="ticker-item"><span class="ticker-dot"></span>Zero JavaScript required</span>
-          <span class="ticker-item"><span class="ticker-dot"></span>AI-powered failure briefs</span>
-          <span class="ticker-item"><span class="ticker-dot"></span>Network-aware assertions</span>
-          <span class="ticker-item"><span class="ticker-dot"></span>File-backed memory</span>
-          <span class="ticker-item"><span class="ticker-dot"></span>Multi-strategy resolution</span>
-          <span class="ticker-item"><span class="ticker-dot"></span>Flakiness detection</span>
-          <span class="ticker-item"><span class="ticker-dot"></span>YAML &amp; Gherkin formats</span>
-          <span class="ticker-item"><span class="ticker-dot"></span>Self-healing tests</span>
-          <span class="ticker-item"><span class="ticker-dot"></span>Zero JavaScript required</span>
-          <span class="ticker-item"><span class="ticker-dot"></span>AI-powered failure briefs</span>
-          <span class="ticker-item"><span class="ticker-dot"></span>Network-aware assertions</span>
-          <span class="ticker-item"><span class="ticker-dot"></span>File-backed memory</span>
-          <span class="ticker-item"><span class="ticker-dot"></span>Multi-strategy resolution</span>
-          <span class="ticker-item"><span class="ticker-dot"></span>Flakiness detection</span>
-          <span class="ticker-item"><span class="ticker-dot"></span>YAML &amp; Gherkin formats</span>
+          <span class="ticker-item"><span class="ticker-dot"></span>Brief it in plain English</span>
+          <span class="ticker-item"><span class="ticker-dot"></span>No test scripts required</span>
+          <span class="ticker-item"><span class="ticker-dot"></span>Tester + BA in one agent</span>
+          <span class="ticker-item"><span class="ticker-dot"></span>Self-healing on every run</span>
+          <span class="ticker-item"><span class="ticker-dot"></span>Business-level reports</span>
+          <span class="ticker-item"><span class="ticker-dot"></span>Network-aware intelligence</span>
+          <span class="ticker-item"><span class="ticker-dot"></span>Compounding memory</span>
+          <span class="ticker-item"><span class="ticker-dot"></span>Zero programming background needed</span>
+          <span class="ticker-item"><span class="ticker-dot"></span>Brief it in plain English</span>
+          <span class="ticker-item"><span class="ticker-dot"></span>No test scripts required</span>
+          <span class="ticker-item"><span class="ticker-dot"></span>Tester + BA in one agent</span>
+          <span class="ticker-item"><span class="ticker-dot"></span>Self-healing on every run</span>
+          <span class="ticker-item"><span class="ticker-dot"></span>Business-level reports</span>
+          <span class="ticker-item"><span class="ticker-dot"></span>Network-aware intelligence</span>
+          <span class="ticker-item"><span class="ticker-dot"></span>Compounding memory</span>
+          <span class="ticker-item"><span class="ticker-dot"></span>Zero programming background needed</span>
         </div>
       </div>
 
       <div class="hero-metrics" style="margin-top:48px;">
         <div class="metric">
-          <div class="metric-value text-gradient" data-target="6" data-display="6">6</div>
-          <div class="metric-label">Element resolution strategies</div>
-        </div>
-        <div class="metric">
-          <div class="metric-value text-gradient" data-target="0" data-display="0">0</div>
-          <div class="metric-label">Lines of JavaScript to write</div>
+          <div class="metric-value text-gradient">0</div>
+          <div class="metric-label">Lines of test code you write</div>
         </div>
         <div class="metric">
           <div class="metric-value text-gradient" data-target="4" data-display="4">4</div>
-          <div class="metric-label">Specialized AI agents</div>
+          <div class="metric-label">Specialized AI agents per scenario</div>
+        </div>
+        <div class="metric">
+          <div class="metric-value text-gradient">∞</div>
+          <div class="metric-label">UI changes it adapts to automatically</div>
         </div>
         <div class="metric">
           <div class="metric-value text-gradient-orange">&lt;15 min</div>
-          <div class="metric-label">First test passing, from zero</div>
+          <div class="metric-label">From scenario to first passing test</div>
         </div>
       </div>
     </div>
@@ -787,58 +786,60 @@
 
   <div class="divider"></div>
 
-  <!-- ─── The Problem ────────────────────────────────── -->
-  <section class="section" id="problem">
+  <!-- ─── The Belief ─────────────────────────────────── -->
+  <section class="section" id="belief">
     <div class="container">
       <div class="center mb-6">
-        <span class="label label-orange" style="margin-bottom:16px;display:inline-flex;">The Problem</span>
-        <h2 style="margin-top:12px;">UI testing is expensive,<br/>brittle, and exclusive</h2>
-        <p style="color:var(--text-muted);max-width:560px;margin:16px auto 0;font-size:16px;line-height:1.7;">
-          QA teams face the same fundamental problems regardless of which tools they reach for.
+        <span class="label label-orange" style="margin-bottom:16px;display:inline-flex;">The Belief</span>
+        <h2 style="margin-top:12px;">The test was never<br/>the problem. The model was.</h2>
+        <p style="color:var(--text-muted);max-width:620px;margin:16px auto 0;font-size:16px;line-height:1.7;">
+          Every testing tool built in the last 20 years shares the same assumption: a test is a script.
+          A script that clicks element A, checks element B, and breaks when either moves.
+          That assumption made sense when UIs were static. Today, it's structurally incompatible with how software is built.
         </p>
       </div>
 
       <div class="problem-grid">
         <div class="pain-card">
-          <div class="pain-icon">💔</div>
+          <div class="pain-icon">🔄</div>
           <div>
-            <h4>Selector Brittleness</h4>
-            <p>A single design sprint can invalidate hundreds of test files. SDETs spend days in "selector archaeology" after every UI refactor.</p>
+            <h4>UIs change constantly. Scripts don't adapt.</h4>
+            <p>A design sprint, a rebrand, a component library upgrade — any of these can silently invalidate hundreds of tests. The script has no way to know what it meant.</p>
           </div>
         </div>
         <div class="pain-card">
-          <div class="pain-icon">🚧</div>
+          <div class="pain-icon">🧱</div>
           <div>
-            <h4>High Floor for Non-Coders</h4>
-            <p>Manual QA testers with years of domain knowledge are excluded because they can't write TypeScript async/await. The tools fail their most valuable users.</p>
+            <h4>Code as the only language of testing</h4>
+            <p>The most valuable testers — those with deep domain knowledge, business understanding, regulatory expertise — are locked out because the tools speak only JavaScript.</p>
           </div>
         </div>
         <div class="pain-card">
-          <div class="pain-icon">⏱️</div>
+          <div class="pain-icon">📉</div>
           <div>
-            <h4>Authoring Is Expensive</h4>
-            <p>An experienced engineer spends 2–4 hours writing a single reliable checkout test. Recorders generate code that breaks in 6 months.</p>
+            <h4>Maintenance cost scales with product velocity</h4>
+            <p>The faster a team ships, the more tests break. At scale, test maintenance consumes 30–50% of automation engineering time. This isn't a tooling problem — it's a model problem.</p>
+          </div>
+        </div>
+        <div class="pain-card">
+          <div class="pain-icon">🔇</div>
+          <div>
+            <h4>Failures tell you nothing meaningful</h4>
+            <p>A payment regression and a renamed CSS class look identical: a red test and a stack trace. The script knows what broke. It has no way to know <em>why it matters</em>.</p>
           </div>
         </div>
         <div class="pain-card">
           <div class="pain-icon">🎲</div>
           <div>
-            <h4>Flakiness Has No System-Level Fix</h4>
-            <p><code>retry()</code> and <code>waitFor()</code> are band-aids. Teams disable flaky tests rather than fix them, creating a false safety net.</p>
+            <h4>Flakiness is endemic, not accidental</h4>
+            <p>Race conditions, animation timing, network variability — these are structural properties of modern apps. Band-aids like <code>retry()</code> and <code>waitFor()</code> don't fix the model.</p>
           </div>
         </div>
         <div class="pain-card">
-          <div class="pain-icon">🔧</div>
+          <div class="pain-icon">💡</div>
           <div>
-            <h4>Maintenance Grows With Velocity</h4>
-            <p>At scale, test maintenance consumes 30–50% of automation time. The faster the team ships, the more tests break. There is no structural answer.</p>
-          </div>
-        </div>
-        <div class="pain-card">
-          <div class="pain-icon">🤷</div>
-          <div>
-            <h4>No Business Intent</h4>
-            <p>Playwright knows nothing about what a test <em>means</em>. A payment failure and a CSS class change look identical — both produce a red test and a stack trace.</p>
+            <h4>The alternative: tests that pursue goals</h4>
+            <p>What if a test wasn't a script at all? What if it was a goal — "the user should be able to check out" — and the system figured out how to verify it, every time, regardless of what changed?</p>
           </div>
         </div>
       </div>
@@ -852,27 +853,33 @@
     <div class="container">
       <div class="center mb-6">
         <span class="label" style="margin-bottom:16px;display:inline-flex;">How it works</span>
-        <h2 style="margin-top:12px;">Describe goals. Agents do the rest.</h2>
+        <h2 style="margin-top:12px;">Brief it. It runs.<br/>You read the report.</h2>
         <p style="color:var(--text-muted);max-width:520px;margin:16px auto 0;font-size:16px;line-height:1.7;">
-          Mich Orion decouples the <em>intent</em> of a test from the <em>implementation</em>. The goal is permanent. The execution strategy adapts.
+          Orion operates like a tester you can brief in plain English and trust to act independently.
+          You set the scenario. It owns the execution.
         </p>
       </div>
 
-      <div class="steps-grid">
+      <div class="steps-grid" style="grid-template-columns:repeat(4,1fr);">
         <div class="step">
           <div class="step-num step-num-1">1</div>
-          <h3>Write a goal</h3>
-          <p>Use plain English, YAML, or Gherkin. Describe what the user should be able to do — not which elements to click. No code required.</p>
+          <h3>Brief the scenario</h3>
+          <p>Describe the user journey in plain English. "A new user signs up and reaches their dashboard." That's enough.</p>
         </div>
         <div class="step">
           <div class="step-num step-num-2">2</div>
-          <h3>Agents execute it</h3>
-          <p>Four specialized agents — Orchestrator, Flow, Observe, and Memory — collaborate to navigate, assert, monitor network traffic, and learn from every run.</p>
+          <h3>Orion builds the test</h3>
+          <p>The Orchestrator agent maps the scenario to steps. No test scripts required. No selectors to choose. No code to review.</p>
         </div>
         <div class="step">
           <div class="step-num step-num-3">3</div>
-          <h3>Get a Failure Brief</h3>
-          <p>When something breaks, you get an incident-style report: what failed, why it's an app bug (not a test issue), and which PR likely caused it.</p>
+          <h3>Agents execute it</h3>
+          <p>Flow, Observe, and Memory agents navigate the live app, monitor network and console, and record what they learn for next time.</p>
+        </div>
+        <div class="step" style="">
+          <div class="step-num" style="width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;margin:0 auto 20px;background:rgba(74,222,128,0.1);border:2px solid rgba(74,222,128,0.4);color:var(--green);">4</div>
+          <h3>Read the report</h3>
+          <p>A business-level summary lands: what passed, what broke, whether it's a real regression or noise, and what the team should do next.</p>
         </div>
       </div>
     </div>
@@ -880,30 +887,33 @@
 
   <div class="divider"></div>
 
-  <!-- ─── Write Tests ─────────────────────────────────── -->
+  <!-- ─── How to Brief Orion ─────────────────────────── -->
   <section class="section" id="authoring">
     <div class="container">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;" class="two-col-grid">
-          <h2 style="margin-top:12px;margin-bottom:16px;">Two formats. Zero JavaScript.</h2>
+        <div>
+          <span class="label" style="margin-bottom:16px;display:inline-flex;">Briefing Orion</span>
+          <h2 style="margin-top:12px;margin-bottom:16px;">If you can describe it,<br/>Orion can test it.</h2>
           <p style="color:var(--text-muted);font-size:15px;line-height:1.7;margin-bottom:24px;">
-            Write tests in YAML or Gherkin-style natural language. Both formats compile to the same goal spec — a structured intent description that the agent swarm executes.
+            A brief is just a user journey written out. Not a test script — a description of what a real user does and what should happen.
+            Write it the way you'd explain it to a new colleague.
           </p>
-          <ul style="list-style:none;display:flex;flex-direction:column;gap:10px;">
-            <li style="display:flex;gap:10px;align-items:flex-start;font-size:14px;">
-              <span style="color:var(--green);font-weight:700;flex-shrink:0;">✓</span>
-              <span style="color:var(--text-muted);">Navigate, click, type, submit, assert visible, assert URL — all in plain language</span>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:12px;">
+            <li style="display:flex;gap:12px;align-items:flex-start;font-size:14px;">
+              <span style="color:var(--cyan);font-weight:700;flex-shrink:0;font-size:16px;">→</span>
+              <span style="color:var(--text-muted);"><strong style="color:var(--text);">No programming background required.</strong> If you can write a user story or an acceptance criterion, you can brief Orion.</span>
             </li>
-            <li style="display:flex;gap:10px;align-items:flex-start;font-size:14px;">
-              <span style="color:var(--green);font-weight:700;flex-shrink:0;">✓</span>
-              <span style="color:var(--text-muted);">Every successful run fingerprints element strategies to <code style="font-size:12px;color:var(--cyan);">.orion/memory/</code></span>
+            <li style="display:flex;gap:12px;align-items:flex-start;font-size:14px;">
+              <span style="color:var(--cyan);font-weight:700;flex-shrink:0;font-size:16px;">→</span>
+              <span style="color:var(--text-muted);"><strong style="color:var(--text);">Orion builds the execution plan.</strong> You describe the journey. Orion decides which elements to interact with and how.</span>
             </li>
-            <li style="display:flex;gap:10px;align-items:flex-start;font-size:14px;">
-              <span style="color:var(--green);font-weight:700;flex-shrink:0;">✓</span>
-              <span style="color:var(--text-muted);">Tests are version-controllable, human-reviewable, and framework-agnostic</span>
+            <li style="display:flex;gap:12px;align-items:flex-start;font-size:14px;">
+              <span style="color:var(--cyan);font-weight:700;flex-shrink:0;font-size:16px;">→</span>
+              <span style="color:var(--text-muted);"><strong style="color:var(--text);">Briefs survive UI changes.</strong> When the app is updated, Orion adapts the execution — the brief you wrote stays valid.</span>
             </li>
-            <li style="display:flex;gap:10px;align-items:flex-start;font-size:14px;">
-              <span style="color:var(--green);font-weight:700;flex-shrink:0;">✓</span>
-              <span style="color:var(--text-muted);">Raw Playwright escape hatch available for power users who need it</span>
+            <li style="display:flex;gap:12px;align-items:flex-start;font-size:14px;">
+              <span style="color:var(--cyan);font-weight:700;flex-shrink:0;font-size:16px;">→</span>
+              <span style="color:var(--text-muted);"><strong style="color:var(--text);">Reviewable by anyone.</strong> A BA can read a brief and verify it captures the right behaviour. No code to decipher.</span>
             </li>
           </ul>
         </div>
@@ -914,31 +924,38 @@
               <span class="dot dot-yellow"></span>
               <span class="dot dot-green"></span>
               <div style="margin-left:8px;display:flex;gap:0;">
-                <button class="code-tab active" onclick="switchTab(event,'yaml')" style="font-size:12px;padding:4px 12px;">YAML</button>
-                <button class="code-tab" onclick="switchTab(event,'gherkin')" style="font-size:12px;padding:4px 12px;">Gherkin</button>
+                <button class="code-tab active" onclick="switchTab(event,'yaml')" style="font-size:12px;padding:4px 12px;">Readable</button>
+                <button class="code-tab" onclick="switchTab(event,'gherkin')" style="font-size:12px;padding:4px 12px;">Simple</button>
               </div>
             </div>
             <div class="terminal-body" id="panel-yaml">
-<span class="t-key">test:</span> <span class="t-val">User can reset their password</span>
-<span class="t-key">url:</span>  <span class="t-str">https://your-app.com/login</span>
+<span class="t-comment"># A brief — not a test script</span>
 <br/>
-<span class="t-key">steps:</span>
-  <span class="t-dim">-</span> <span class="t-str">"click the Forgot password link"</span>
-  <span class="t-dim">-</span> <span class="t-str">"type \"test@example.com\" into the email field"</span>
-  <span class="t-dim">-</span> <span class="t-str">"submit the form"</span>
-  <span class="t-dim">-</span> <span class="t-str">"I should see a confirmation message"</span>
-  <span class="t-dim">-</span> <span class="t-str">"url should contain reset-sent"</span>
+<span class="t-step">Scenario:</span> <span class="t-val">New user signs up successfully</span>
+<span class="t-step">URL:</span>      <span class="t-str">https://your-app.com/signup</span>
+<br/>
+<span class="t-step">Given</span> I am on the sign up page
+<span class="t-step">When</span>  I fill in my name, email and password
+<span class="t-step">And</span>   I click <span class="t-str">"Create account"</span>
+<span class="t-step">Then</span>  I should see a welcome message
+<span class="t-step">And</span>   I should land on the dashboard
+<span class="t-step">And</span>   url should contain <span class="t-str">/dashboard</span>
+<br/>
+<span class="t-pass">✓</span> <span class="t-dim">Orion handles the how. You own the what.</span>
             </div>
             <div class="terminal-body" id="panel-gherkin" style="display:none;">
-<span class="t-key">Test:</span> <span class="t-val">User can reset their password</span>
-<span class="t-key">URL:</span>  <span class="t-str">https://your-app.com/login</span>
+<span class="t-comment"># Even simpler — just the steps</span>
 <br/>
-<span class="t-step">Given</span> I am on the login page
-<span class="t-step">When</span>  I click <span class="t-str">"Forgot password"</span>
-<span class="t-step">And</span>   I enter my email <span class="t-str">"test@example.com"</span>
-<span class="t-step">And</span>   I submit the form
-<span class="t-step">Then</span>  I should see a confirmation message
-<span class="t-step">And</span>   url should contain <span class="t-str">reset-sent</span>
+<span class="t-key">test:</span> <span class="t-val">User signs up and reaches dashboard</span>
+<span class="t-key">url:</span>  <span class="t-str">https://your-app.com/signup</span>
+<br/>
+<span class="t-key">steps:</span>
+  <span class="t-dim">-</span> <span class="t-str">"fill in name, email and password"</span>
+  <span class="t-dim">-</span> <span class="t-str">"click Create account"</span>
+  <span class="t-dim">-</span> <span class="t-str">"I should see a welcome message"</span>
+  <span class="t-dim">-</span> <span class="t-str">"url should contain /dashboard"</span>
+<br/>
+<span class="t-pass">✓</span> <span class="t-dim">Reads like a sticky note. Runs like a test suite.</span>
             </div>
           </div>
         </div>
@@ -948,46 +965,95 @@
 
   <div class="divider"></div>
 
-  <!-- ─── Features ───────────────────────────────────── -->
+  <!-- ─── Agent Modes ─────────────────────────────────── -->
+  <section class="section" id="agent-modes">
+    <div class="container">
+      <div class="center mb-6">
+        <span class="label" style="margin-bottom:16px;display:inline-flex;">Agent Modes</span>
+        <h2 style="margin-top:12px;">One agent. Two minds.</h2>
+        <p style="color:var(--text-muted);max-width:540px;margin:16px auto 0;font-size:16px;line-height:1.7;">
+          Orion operates in two modes simultaneously: the precision of a senior QA engineer and the business reasoning of a BA.
+          Most tools only do the first. Neither does both.
+        </p>
+      </div>
+
+      <div class="grid-2" style="gap:32px;margin-top:48px;">
+        <div class="card" style="border-color:rgba(0,212,255,0.25);">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+            <div style="width:48px;height:48px;border-radius:12px;background:var(--cyan-dim);border:1px solid rgba(0,212,255,0.25);display:flex;align-items:center;justify-content:center;font-size:22px;">🧪</div>
+            <div>
+              <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--cyan);font-weight:600;">Mode 1</div>
+              <h3 style="font-size:20px;">Tester Mode</h3>
+            </div>
+          </div>
+          <p style="color:var(--text-muted);font-size:14px;line-height:1.7;margin-bottom:20px;">Acts as a meticulous QA engineer. Navigates the app, executes every step of the scenario, monitors network calls and console errors, and validates outcomes against intent.</p>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;gap:10px;font-size:13px;"><span style="color:var(--cyan);">✦</span><span style="color:var(--text-muted);">6-strategy element resolution — never relies on a single selector</span></div>
+            <div style="display:flex;gap:10px;font-size:13px;"><span style="color:var(--cyan);">✦</span><span style="color:var(--text-muted);">Self-healing when the UI changes — adapts strategy, keeps going</span></div>
+            <div style="display:flex;gap:10px;font-size:13px;"><span style="color:var(--cyan);">✦</span><span style="color:var(--text-muted);">Network-aware assertions — validates API responses, not just pixels</span></div>
+            <div style="display:flex;gap:10px;font-size:13px;"><span style="color:var(--cyan);">✦</span><span style="color:var(--text-muted);">Memory that compounds — each run makes the next run smarter</span></div>
+          </div>
+        </div>
+
+        <div class="card" style="border-color:rgba(167,139,250,0.3);">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+            <div style="width:48px;height:48px;border-radius:12px;background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.25);display:flex;align-items:center;justify-content:center;font-size:22px;">📋</div>
+            <div>
+              <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--purple);font-weight:600;">Mode 2</div>
+              <h3 style="font-size:20px;">BA Mode</h3>
+            </div>
+          </div>
+          <p style="color:var(--text-muted);font-size:14px;line-height:1.7;margin-bottom:20px;">Acts as a business analyst reviewing the outcome. Translates technical failures into business impact. Distinguishes regressions from noise. Identifies what the team actually needs to act on.</p>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;gap:10px;font-size:13px;"><span style="color:var(--purple);">✦</span><span style="color:var(--text-muted);">Business-level failure brief — not a stack trace, a post-mortem</span></div>
+            <div style="display:flex;gap:10px;font-size:13px;"><span style="color:var(--purple);">✦</span><span style="color:var(--text-muted);">App bug vs test drift classification — separates real regressions from noise</span></div>
+            <div style="display:flex;gap:10px;font-size:13px;"><span style="color:var(--purple);">✦</span><span style="color:var(--text-muted);">Likely-cause attribution — links failure to recent PRs and code changes</span></div>
+            <div style="display:flex;gap:10px;font-size:13px;"><span style="color:var(--purple);">✦</span><span style="color:var(--text-muted);">Pattern detection — flags recurring failure signatures across runs</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ─── Features ─────────────────────────────────────── -->
   <section class="section" id="features">
     <div class="container">
       <div class="center mb-6">
-        <span class="label" style="margin-bottom:16px;display:inline-flex;">Features</span>
-        <h2 style="margin-top:12px;">Built for resilience, not just automation</h2>
-        <p style="color:var(--text-muted);max-width:540px;margin:16px auto 0;font-size:16px;line-height:1.7;">
-          Every capability was designed around a real failure mode in traditional test frameworks.
-        </p>
+        <span class="label" style="margin-bottom:16px;display:inline-flex;">Capabilities</span>
+        <h2 style="margin-top:12px;">What the agent does<br/>on every run</h2>
       </div>
       <div class="features-grid">
         <div class="feature-card">
-          <div class="feature-icon" style="background:var(--cyan-dim);border:1px solid rgba(0,212,255,0.2);">🧠</div>
-          <h3>Multi-Strategy Resolution</h3>
-          <p>Elements are found via aria-label → role+name → label-for → placeholder → visible-text → DOM hint. The fragile CSS selector is always the last resort, never the first.</p>
+          <div class="feature-icon" style="background:var(--cyan-dim);border:1px solid rgba(0,212,255,0.2);">🧭</div>
+          <h3>Human-like navigation</h3>
+          <p>Orion reads the interface the way a tester does — by aria role, visible label, screen region, and context. Not by CSS paths that break when a class name changes.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon" style="background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.2);">💾</div>
-          <h3>File-Backed Memory</h3>
-          <p>Every successful resolution is fingerprinted to <code style="font-size:11px;color:var(--cyan);">.orion/memory/&lt;test&gt;.json</code>. Future runs use the strategies that already worked, eliminating cold-start fragility.</p>
+          <div class="feature-icon" style="background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.2);">🔁</div>
+          <h3>Autonomous self-healing</h3>
+          <p>When a UI element moves or is renamed, Orion escalates to the next strategy, succeeds, and logs the change. The test stays green. The team gets a low-priority notice.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon" style="background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.2);">📡</div>
-          <h3>Network Observation</h3>
-          <p>XHR and fetch traffic is recorded alongside every step. Assertions can target network outcomes — "POST /api/orders returned 201" — eliminating race-condition flakiness structurally.</p>
+          <h3>Network intelligence</h3>
+          <p>Every step is correlated with XHR and fetch traffic. Orion can verify that the right API calls happened — not just that the right pixels appeared.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon" style="background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.2);">🩺</div>
-          <h3>Failure Brief</h3>
-          <p>Incidents are reported like a post-mortem: what failed, why it's an app bug vs test drift, which JS error fired, and which recent PR is the likely culprit. No stack traces.</p>
+          <div class="feature-icon" style="background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.2);">📋</div>
+          <h3>BA-grade reports</h3>
+          <p>Failures are reported as incident briefs: user journey impacted, business severity, likely root cause, suggested next step. Readable by any team member.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon" style="background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.2);">🔮</div>
-          <h3>Flakiness Detection</h3>
-          <p>After enough runs, recurring failure signatures are automatically flagged as patterns — not isolated failures. The system learns that step 3 flakes at 2:30 PM UTC in CI and tells you why.</p>
+          <div class="feature-icon" style="background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.2);">🧠</div>
+          <h3>Compounding memory</h3>
+          <p>Every run updates Orion's knowledge of the app. Which strategies work for which elements. Which steps tend to flake. Which failure patterns have appeared before.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon" style="background:rgba(255,124,53,0.08);border:1px solid rgba(255,124,53,0.2);">⚡</div>
-          <h3>LLM-Powered Briefs</h3>
-          <p>With an Anthropic API key, failure briefs are written by Claude Sonnet 4.6 with prompt caching. Without a key, you still get a fully structured deterministic brief.</p>
+          <h3>LLM reasoning engine</h3>
+          <p>With an Anthropic API key, Orion's BA mode is powered by Claude Sonnet 4.6. Without one, deterministic briefs still give you structured, actionable output.</p>
         </div>
       </div>
     </div>
@@ -1001,10 +1067,10 @@
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;" class="two-col-grid">
           <h2 style="margin-top:12px;margin-bottom:16px;">Selectors become irrelevant</h2>
           <p style="color:var(--text-muted);font-size:15px;line-height:1.7;margin-bottom:16px;">
-            Mich Orion stores a <strong style="color:var(--text);">multi-modal element fingerprint</strong> — not a CSS selector. Each interactive element is known by its aria role, visible text, screen region, and network trigger.
+            Orion stores a <strong style="color:var(--text);">multi-modal element fingerprint</strong> — not a CSS selector. Each interactive element is known by its aria role, visible text, screen region, and network trigger.
           </p>
           <p style="color:var(--text-muted);font-size:15px;line-height:1.7;margin-bottom:24px;">
-            Strategies are ranked by a confidence score. When the developer renames a component, the agent tries the next strategy, succeeds, updates its strategy map, and the test stays green. CI never sees red.
+            Strategies are ranked by confidence. When a developer renames a component, Orion tries the next strategy, succeeds, updates its map, and the test stays green. CI never sees red.
           </p>
 
           <div class="heal-steps">
@@ -1086,9 +1152,9 @@
     <div class="container">
       <div class="center mb-6">
         <span class="label label-orange" style="margin-bottom:16px;display:inline-flex;">Failure Brief</span>
-        <h2 style="margin-top:12px;">Incident reports, not stack traces</h2>
+        <h2 style="margin-top:12px;">The report your BA<br/>actually wants to read</h2>
         <p style="color:var(--text-muted);max-width:540px;margin:16px auto 0;font-size:16px;line-height:1.7;">
-          When a test fails, Mich Orion doesn't show a wall of JavaScript. It writes a structured report that tells you <em>what broke, why it's a real bug, and who likely caused it</em>.
+          Not a stack trace. Not a wall of logs. A structured incident brief that tells the whole team — engineers, PMs, BAs — exactly what happened and what to do next.
         </p>
       </div>
 
@@ -1144,9 +1210,9 @@
     <div class="container">
       <div class="center mb-6">
         <span class="label label-purple" style="margin-bottom:16px;display:inline-flex;">Architecture</span>
-        <h2 style="margin-top:12px;">Four agents. One goal.</h2>
+        <h2 style="margin-top:12px;">The agent team<br/>behind every run</h2>
         <p style="color:var(--text-muted);max-width:520px;margin:16px auto 0;font-size:16px;line-height:1.7;">
-          Mich Orion's multi-agent architecture separates concerns that traditional tools conflate: navigation, assertion, observation, and learning.
+          Each specialist handles one concern. Together they cover what a full QA + BA team would — navigation, validation, observation, and institutional memory.
         </p>
       </div>
 
@@ -1186,18 +1252,20 @@
 
   <div class="divider"></div>
 
-  <!-- ─── Playwright Comparison ──────────────────────── -->
+  <!-- ─── What Orion Is ───────────────────────────────── -->
   <section class="section" id="comparison">
     <div class="container">
       <div class="center mb-6">
-        <span class="label" style="margin-bottom:16px;display:inline-flex;">Comparison</span>
-        <h2 style="margin-top:12px;">How Mich Orion stacks up</h2>
-        <p style="color:var(--text-muted);max-width:520px;margin:16px auto 0;font-size:16px;line-height:1.7;">
-          Mich Orion is built <em>on top of</em> Playwright — not against it. Playwright handles browser primitives. Mich Orion handles everything above the <code style="font-size:13px;color:var(--cyan);">Page</code> object.
+        <span class="label" style="margin-bottom:16px;display:inline-flex;">The Architecture</span>
+        <h2 style="margin-top:12px;">Built on Playwright.<br/>Thinking above it.</h2>
+        <p style="color:var(--text-muted);max-width:560px;margin:16px auto 0;font-size:16px;line-height:1.7;">
+          Orion uses Playwright as its browser substrate — every click, navigation, and screenshot goes through Playwright's battle-tested engine.
+          What Orion adds is everything above the <code style="font-size:13px;color:var(--cyan);">Page</code> object: goal understanding, multi-strategy resolution,
+          self-healing memory, and business-level failure reasoning.
         </p>
       </div>
 
-      <div style="overflow-x:auto;">
+      <div style="overflow-x:auto;display:none;">
         <table class="comp-table">
           <thead>
             <tr>
@@ -1272,9 +1340,26 @@
         </table>
       </div>
 
-      <div style="margin-top:24px;padding:16px 20px;background:var(--cyan-dim);border:1px solid rgba(0,212,255,0.2);border-radius:var(--radius);font-size:13px;color:var(--text-muted);display:flex;gap:10px;align-items:flex-start;">
+      <div style="max-width:680px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
+        <div class="card" style="text-align:center;">
+          <div style="font-size:28px;margin-bottom:12px;">🎯</div>
+          <h4 style="font-size:14px;margin-bottom:8px;">Goal as the test</h4>
+          <p style="font-size:13px;color:var(--text-muted);line-height:1.5;">The intent is permanent. The execution strategy is dynamic. Goals don't break when UIs change.</p>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:28px;margin-bottom:12px;">🧠</div>
+          <h4 style="font-size:14px;margin-bottom:8px;">Memory that compounds</h4>
+          <p style="font-size:13px;color:var(--text-muted);line-height:1.5;">Every run makes Orion smarter. Successful element strategies are saved, ranked, and preferred on the next run.</p>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:28px;margin-bottom:12px;">📋</div>
+          <h4 style="font-size:14px;margin-bottom:8px;">Briefs, not traces</h4>
+          <p style="font-size:13px;color:var(--text-muted);line-height:1.5;">Failures are explained at the business level. You know if it's a real bug or selector drift — without reading a stack trace.</p>
+        </div>
+      </div>
+      <div style="margin-top:20px;padding:16px 20px;background:var(--cyan-dim);border:1px solid rgba(0,212,255,0.2);border-radius:var(--radius);font-size:13px;color:var(--text-muted);display:flex;gap:10px;align-items:flex-start;max-width:680px;margin:20px auto 0;">
         <span style="color:var(--cyan);flex-shrink:0;">ℹ</span>
-        <span>Mich Orion uses Playwright as its browser execution substrate. Any step can include a raw Playwright script block — power users aren't locked out. New users never need it.</span>
+        <span>Any step can include a raw Playwright script block — power users are never locked out. New users never need it.</span>
       </div>
     </div>
   </section>
@@ -1285,13 +1370,14 @@
   <section class="section">
     <div class="container">
       <div class="center mb-6">
-        <span class="label label-orange" style="margin-bottom:16px;display:inline-flex;">Before &amp; After</span>
-        <h2 style="margin-top:12px;">The same test. Ten times less.</h2>
+        <span class="label label-orange" style="margin-bottom:16px;display:inline-flex;">The Contrast</span>
+        <h2 style="margin-top:12px;">What a goal looks like<br/>vs. what a script looks like.</h2>
+        <p style="color:var(--text-muted);max-width:520px;margin:16px auto 0;font-size:15px;line-height:1.7;">Both verify the same user flow. One breaks when a class name changes. The other doesn't know what a class name is.</p>
       </div>
 
       <div class="compare-grid">
         <div class="compare-bad">
-          <div class="compare-label">Before — Playwright (TypeScript)</div>
+          <div class="compare-label">Script-based testing</div>
           <div class="compare-code">
 <span class="t-comment">// 17 lines of brittle, selector-dependent code</span><br/>
 <span class="t-key">test</span>(<span class="t-str">'user can reset password'</span>, <span class="t-step">async</span> ({ page }) => {<br/>
@@ -1314,7 +1400,7 @@
           </div>
         </div>
         <div class="compare-good">
-          <div class="compare-label">After — Mich Orion (YAML)</div>
+          <div class="compare-label">Goal-based testing — Orion (YAML)</div>
           <div class="compare-code">
 <span class="t-comment"># 7 lines. No selectors. Self-healing.</span><br/>
 <br/>
@@ -1344,7 +1430,7 @@
         <span class="label" style="margin-bottom:16px;display:inline-flex;">Get Started</span>
         <h2 style="margin-top:12px;">Up and running in 3 steps</h2>
         <p style="color:var(--text-muted);max-width:480px;margin:16px auto 0;font-size:16px;line-height:1.7;">
-          No account required. No cloud signup. Runs entirely on your machine with Chromium.
+          No account. No cloud signup. No configuration files. Runs locally on Chromium.
         </p>
       </div>
 
@@ -1360,7 +1446,7 @@
             <div class="install-step-num">Step 1 — Install</div>
             <div class="cmd-line">
               <span class="cmd-prompt">$</span>
-              <span class="cmd-text" id="cmd1-npm">npm install @mich/orion</span>
+              <span class="cmd-text" id="cmd1-npm">npm install @oriontest/orion</span>
               <button class="cmd-copy" onclick="copyCmd('cmd1-npm')">copy</button>
             </div>
           </div>
@@ -1388,7 +1474,7 @@
             <div class="install-step-num">Step 1 — Install</div>
             <div class="cmd-line">
               <span class="cmd-prompt">$</span>
-              <span class="cmd-text" id="cmd1-pnpm">pnpm add @mich/orion</span>
+              <span class="cmd-text" id="cmd1-pnpm">pnpm add @oriontest/orion</span>
               <button class="cmd-copy" onclick="copyCmd('cmd1-pnpm')">copy</button>
             </div>
           </div>
@@ -1415,7 +1501,7 @@
             <div class="install-step-num">Step 1 — Install</div>
             <div class="cmd-line">
               <span class="cmd-prompt">$</span>
-              <span class="cmd-text" id="cmd1-yarn">yarn add @mich/orion</span>
+              <span class="cmd-text" id="cmd1-yarn">yarn add @oriontest/orion</span>
               <button class="cmd-copy" onclick="copyCmd('cmd1-yarn')">copy</button>
             </div>
           </div>
@@ -1456,8 +1542,9 @@
   <section class="section-sm">
     <div class="container">
       <div class="center" style="margin-bottom:32px;">
-        <h3>Supported step phrasings</h3>
-        <p style="color:var(--text-muted);margin-top:8px;font-size:14px;">Mich Orion's goal parser recognises these natural language patterns.</p>
+        <span class="label" style="margin-bottom:12px;display:inline-flex;">Briefing language</span>
+        <h3 style="margin-top:12px;">How to describe a step</h3>
+        <p style="color:var(--text-muted);margin-top:8px;font-size:14px;">Write steps the way you'd explain them to a colleague. Orion understands all of these naturally.</p>
       </div>
       <div style="overflow-x:auto;max-width:800px;margin:0 auto;">
         <table style="width:100%;border-collapse:collapse;font-size:13px;">
@@ -1503,10 +1590,10 @@
   <!-- ─── CTA ─────────────────────────────────────────── -->
   <section class="cta-section">
     <div class="container">
-      <h2>Ready to stop maintaining selectors?</h2>
-      <p>Write your first test in under 15 minutes — no code, no account, no config files.</p>
+      <h2>Stop writing test scripts.<br/>Start briefing an agent.</h2>
+      <p>Your first scenario running in under 15 minutes. No code. No config. No QA backlog.</p>
       <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-        <a href="#install" class="btn btn-primary btn-lg">Install Mich Orion</a>
+        <a href="#install" class="btn btn-primary btn-lg">Deploy your AI tester</a>
         <a href="https://github.com/TshepoNK/Mich" class="btn btn-ghost btn-lg">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/></svg>
           View on GitHub
@@ -1536,8 +1623,8 @@
             <line x1="6"  y1="10" x2="14" y2="6"  stroke="rgba(0,212,255,0.25)" stroke-width="1"/>
           </svg>
           <div>
-            <div style="font-size:15px;font-weight:700;">Mich Orion</div>
-            <div style="font-size:11px;color:var(--text-dim);font-weight:400;margin-top:1px;">by TechElite</div>
+            <div style="font-size:15px;font-weight:700;">Orion</div>
+            <div style="font-size:11px;color:var(--text-dim);font-weight:400;margin-top:1px;">Goal-oriented testing</div>
           </div>
         </div>
         <div class="footer-links">
@@ -1548,7 +1635,7 @@
         <span class="footer-badge">v0.1 — Walking Skeleton</span>
       </div>
       <div style="margin-top:24px;font-size:12px;color:var(--text-dim);">
-        © 2026 TechElite. Built on Playwright. Powered by Claude Sonnet 4.6. Requires Node.js ≥ 20.
+        © 2026 Orion. Open source. Built on Playwright. Powered by Claude Sonnet 4.6. Requires Node.js ≥ 20.
       </div>
     </div>
   </footer>
